@@ -1,5 +1,34 @@
 import mongoose from ("mongoose");
 
+
+const questionSchema = new mongoose.Schema({
+  question: {
+    type: String, 
+  },
+  difficulty: {
+    type: String, 
+  },
+  timelimit: {
+    type: Number, 
+  },
+  score : {
+    type: Number,
+    default: 0
+  },
+  confidence : {
+    type: Number,
+    default: 0
+  },
+  communication : {
+    type: Number,
+    default: 0
+  },
+  correctness : {
+    type: Number,
+    default: 0
+  }
+});
+
 const interviewSchema = new mongoose.Schema({
 
   user: {
@@ -13,40 +42,32 @@ const interviewSchema = new mongoose.Schema({
     required: true
   },
 
-  level: {
+  mode: {
     type: String,
-    enum: ["beginner", "intermediate", "advanced"],
+    enum: ["HR", "Technical"],
     required: true
   },
 
-  domain: {
+  experience : {
     type: String,
     required: true
-  },
+  } ,
 
-  questions: [
-    {
-      question: { type: String, required: true },
-      answer: { type: String },
-      aiRating: { type: Number }
-    }
-  ],
-
-  aiScore: Number,
-
-  feedback: String,
-
-  strengths: [String],
-
-  weaknesses: [String],
-
-  status: {
+  resumeText :  { 
     type: String,
-    enum: ["started", "completed"],
-    default: "started"
+  },
+  questions: [questionSchema],
+
+  finalScore: {
+    type: Number,
+    default: 0
   },
 
-  duration: Number
+  status : {
+    type: String,
+    enum: [ "Completed", "Incomplete"],
+    default: "Incomplete"
+  }
 
 }, { timestamps: true });
 

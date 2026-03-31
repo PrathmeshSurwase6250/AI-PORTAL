@@ -1,4 +1,4 @@
-import {  analyzeResume , generateQuestions , submitAnswer , finishInterview } from "../controllers/interview.js";
+import {  analyzeResume , generateQuestions , submitAnswer , finishInterview  ,  getMyInterviews , getReport} from "../controllers/interview.js";
 import express from "express";
 import {uploads} from "../middleware/multer.js";
 import auth from "../middleware/auth.js";
@@ -13,5 +13,10 @@ router.post("/generate-questions" , auth , generateQuestions);
 router.post("/submit-answer" , auth , submitAnswer);
 
 router.post("/finish-interview" , auth , finishInterview);
+
+router.get("/my-interviews" , auth , getMyInterviews);
+
+router.get("/report/:interviewId" , auth , getReport);
+
 
 export default router;

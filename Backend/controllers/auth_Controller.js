@@ -14,7 +14,7 @@ const userlogin = async (req, res) => {
             });
         }
 
-        const { email, password } = req.body;
+        const { email } = req.body;
 
         const findOne = await User.findOne({ email });
 
@@ -24,15 +24,16 @@ const userlogin = async (req, res) => {
             });
         }
 
-        const isMatched = await bcrypt.compare(password, findOne.password);
+        // const isMatched = await bcrypt.compare(password, findOne.password);
 
-        if (!isMatched) {
-            return res.status(401).json({
-                message: "Invalid password"
-            });
-        }
+        // if (!isMatched) {
+        //     return res.status(401).json({
+        //         message: "Invalid password"
+        //     });
+        // }
 
         let accessToken = generateAccessToken(findOne._id);
+
         let refreshToken = generateRefreshToken(findOne._id);
 
         res.cookie("refreshToken", refreshToken, {
@@ -62,7 +63,7 @@ const signUp = async (req, res) => {
             });
         }
 
-        const { username, email, password , role } = req.body;
+        const { username, email,  } = req.body;
 
         const find = await User.findOne({ email });
 
@@ -72,15 +73,15 @@ const signUp = async (req, res) => {
             });
         }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // const hashedPassword = await bcrypt.hash(password, 10);
 
-        const allowedRoles = ["jobseeker", "recruiter"];
+        // const allowedRoles = ["jobseeker", "recruiter"];
 
         const newUser = await User.create({
             username,
             email,
-            password: hashedPassword , 
-            role : allowedRoles.includes(role) ? role : "jobseeker"
+            // password: hashedPassword , 
+            // role : allowedRoles.includes(role) ? role : "jobseeker"
         });
 
         const accessToken = generateAccessToken(newUser._id);
@@ -134,8 +135,16 @@ const refreshToken = async (req, res) => {
     });
 };
 
-export default {
-    userlogin,
-    signUp,
-    refreshToken
+ const logout = async (req, res) => {
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: false,
+        sameSite: "strict"
+    }); 
+
+    res.json({
+        message: "Logged out successfully"
+    });
 };
+
+export { userlogin, signUp, logout, refreshToken };

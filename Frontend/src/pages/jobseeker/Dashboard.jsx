@@ -82,10 +82,11 @@ const JobseekerDashboard = () => {
                         </>
                     ) : (
                         <>
+                            <Link to="/my-resumes" className="block">
                             <motion.div 
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group"
+                                className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group hover:border-blue-200 hover:shadow-md transition-all"
                             >
                                 <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-blue-50 opacity-50 group-hover:scale-150 transition-transform duration-500 ease-out"></div>
                                 <div className="flex justify-between items-start relative z-10">
@@ -95,9 +96,11 @@ const JobseekerDashboard = () => {
                                     <div className="flex flex-col items-end">
                                         <span className="text-gray-500 text-sm font-bold tracking-wide uppercase mb-1">Resumes Built</span>
                                         <h3 className="text-4xl font-heading font-extrabold text-gray-900">{stats.resumeCount}</h3>
+                                        <span className="text-xs text-blue-600 font-bold mt-1">View all →</span>
                                     </div>
                                 </div>
                             </motion.div>
+                            </Link>
 
                             <Link to="/my-applications" className="block">
                             <motion.div 
@@ -150,7 +153,7 @@ const JobseekerDashboard = () => {
                             <h3 className="font-heading font-bold text-gray-900 text-lg flex items-center gap-2">
                                 <IoDocumentTextOutline className="text-gray-400" /> Latest AI Resumes
                             </h3>
-                            <Link to="/ai-resume" className="text-sm font-bold text-brand-600 hover:text-brand-700">View Builder</Link>
+                            <Link to="/my-resumes" className="text-sm font-bold text-brand-600 hover:text-brand-700">View All →</Link>
                         </div>
                         <div className="p-6 flex-1">
                             {loading ? (

@@ -33,3 +33,8 @@ export const deleteResume = async (resumeId) => {
     const response = await axios.delete(`${ServerURL}/api/resume/resume/${resumeId}`, getHeaders());
     return response.data;
 };
+
+export const getAiSuggestions = async (resumeId) => {
+    const response = await axios.post(`${ServerURL}/api/resume/ai-suggest/${resumeId}`, {}, getHeaders());
+    return response.data;
+};

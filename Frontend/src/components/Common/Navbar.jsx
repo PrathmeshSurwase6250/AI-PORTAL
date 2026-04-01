@@ -45,6 +45,7 @@ const Navbar = () => {
                             <Link to="/jobs" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>Jobs</Link>
                             <Link to="/ai-resume" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>AI Resume</Link>
                             <Link to="/interview" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>AI Interviewer</Link>
+                            <Link to="/code-reviewer" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>Code Review</Link>
                         </>
                     )}
 

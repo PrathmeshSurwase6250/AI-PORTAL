@@ -24,6 +24,7 @@ import JobApplicants from './pages/applications/JobApplicants'
 
 import JobseekerDashboard from './pages/jobseeker/Dashboard'
 import ResumeBuilderPage from './pages/ai/ResumeBuilderPage'
+import CodeReviewerPage from './pages/ai/CodeReviewerPage'
 
 // Admin Layout & Pages
 import AdminLayout from './pages/layout/AdminLayout'
@@ -93,6 +94,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/dashboard" element={<JobseekerDashboard />} />
         <Route path="/ai-resume" element={<ResumeBuilderPage />} />
+        <Route path="/code-reviewer" element={<CodeReviewerPage />} />
 
         {/* Application Management Routes */}
         <Route path="/my-applications" element={<MyApplications />} />

@@ -23,8 +23,10 @@ const createJobPost = async (req, res) => {
         });
 
     } catch (err) {
+        console.log("createJobPost Error:", err);
         res.status(500).json({
-            message: "Server Side Error!"
+            message: "Server Side Error!",
+            error: err.message
         });
     }
 };

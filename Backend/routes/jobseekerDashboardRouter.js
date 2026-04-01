@@ -1,7 +1,7 @@
 import  {jobseeker_Dashboard, resumeShow, interviewShow , interviewPerformances } from "../controllers/jobseeker_Dashboard.js";
 import express from "express";
-import authMiddleware from "../middleware/authMiddleware.js";
-import role from "../middleware/role.js";
+import authMiddleware from "../middelwares/auth.js";
+import role from "../middelwares/roleMiddleware.js";
 
 const router = express.Router();
 

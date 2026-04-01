@@ -14,7 +14,7 @@ const userlogin = async (req, res) => {
             });
         }
 
-        const { email } = req.body;
+        const { email, password } = req.body;
 
         const findOne = await User.findOne({ email });
 
@@ -24,13 +24,19 @@ const userlogin = async (req, res) => {
             });
         }
 
-        // const isMatched = await bcrypt.compare(password, findOne.password);
+        if (!findOne.password) {
+            return res.status(401).json({
+                message: "This account was registered via Google. Please sign in with Google."
+            });
+        }
 
-        // if (!isMatched) {
-        //     return res.status(401).json({
-        //         message: "Invalid password"
-        //     });
-        // }
+        const isMatched = await bcrypt.compare(password, findOne.password);
+
+        if (!isMatched) {
+            return res.status(401).json({
+                message: "Invalid password"
+            });
+        }
 
         let accessToken = generateAccessToken(findOne._id);
 
@@ -63,7 +69,7 @@ const signUp = async (req, res) => {
             });
         }
 
-        const { username, email,  } = req.body;
+        const { username, email, password, role } = req.body;
 
         const find = await User.findOne({ email });
 
@@ -73,15 +79,18 @@ const signUp = async (req, res) => {
             });
         }
 
-        // const hashedPassword = await bcrypt.hash(password, 10);
+        let hashedPassword;
+        if (password) {
+            hashedPassword = await bcrypt.hash(password, 10);
+        }
 
-        // const allowedRoles = ["jobseeker", "recruiter"];
+        const allowedRoles = ["jobseeker", "recruiter"];
 
         const newUser = await User.create({
             username,
             email,
-            // password: hashedPassword , 
-            // role : allowedRoles.includes(role) ? role : "jobseeker"
+            password: hashedPassword,
+            role: allowedRoles.includes(role) ? role : "jobseeker"
         });
 
         const accessToken = generateAccessToken(newUser._id);
@@ -135,16 +144,52 @@ const refreshToken = async (req, res) => {
     });
 };
 
- const logout = async (req, res) => {
+const logout = async (req, res) => {
     res.clearCookie("refreshToken", {
         httpOnly: true,
         secure: false,
         sameSite: "strict"
-    }); 
+    });
 
     res.json({
         message: "Logged out successfully"
     });
 };
 
-export { userlogin, signUp, logout, refreshToken };
+// GOOGLE AUTH
+const googleAuth = async (req, res) => {
+    try {
+        const { email, username } = req.body;
+        if (!email) return res.status(400).json({ message: "Email required" });
+
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            user = await User.create({
+                username: username || email.split("@")[0],
+                email,
+                role: "jobseeker"
+            });
+        }
+
+        const accessToken = generateAccessToken(user._id);
+        const refreshToken = generateRefreshToken(user._id);
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true,
+            secure: false,
+            sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        res.status(200).json({
+            message: "Google Auth successful",
+            accessToken
+        });
+
+    } catch (err) {
+        res.status(500).json({ message: "Server Side Error" });
+    }
+};
+
+export { userlogin, signUp, logout, refreshToken, googleAuth };

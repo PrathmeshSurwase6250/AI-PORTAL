@@ -1,9 +1,10 @@
 import React from 'react'
-import Navbar from '../components/Navbar'
 
 const InterviewHome = () => {
   return (
-    <div className='min-h-screen bg-gray-100 flex flex-col'> <Navbar/></div>
+    <div className='min-h-screen bg-gray-100 flex flex-col'>
+      <div className='flex-1 px-6 py-10'>  </div>
+    </div>
   )
 }
 

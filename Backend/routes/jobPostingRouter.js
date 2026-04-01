@@ -1,15 +1,11 @@
-import {
-    createJobPost,
-    updatedJobPost,
-    deletedJobPost,
-    showAllPost
-} from "../controllers/jobPosting_controlller.js";
+import jobPostingController from "../controllers/jobPosting_controlller.js";
+const { createJobPost, updatedJobPost, deletedJobPost, showAllPost } = jobPostingController;
 
 import express from "express";
 
-import authMiddleware from "../middleware/authMiddleware.js";
+import authMiddleware from "../middelwares/auth.js";
 
-import role from "../middleware/role.js";
+import role from "../middelwares/roleMiddleware.js";
 
 const router = express.Router(); 
 

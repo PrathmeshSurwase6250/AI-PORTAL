@@ -17,16 +17,25 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: ["http://localhost:5173", "http://localhost:5174"],
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD"],
-  credentials: true 
+  credentials: true
 }));
 
 app.use(methodOverride("_method"));
 
+import feedbackRouter from "./routes/feedbackRouter.js";
+import jobseekerDashboardRouter from "./routes/jobseekerDashboardRouter.js";
+import resumeRoutes from "./routes/resumeRoutes.js";
+import jobPostingRouter from "./routes/jobPostingRouter.js";
+
 // Routes
 app.use("/api/auth", auth);
 app.use("/api/user", userRoutes);
+app.use("/api/feedback", feedbackRouter);
+app.use("/api/jobseeker", jobseekerDashboardRouter);
+app.use("/api/resume", resumeRoutes);
+app.use("/api/jobPosting", jobPostingRouter);
 
 // Test Route
 app.get("/", (req, res) => {

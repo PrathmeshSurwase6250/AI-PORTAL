@@ -1,10 +1,10 @@
-import resume_Model from "../models/resume_Model.js";
+import resume_Model from "../models/resume_Models.js";
 import applicationModel from "../models/application_Model.js";
 import interviewModel from "../models/interview_Model.js";
 
 
 const jobseeker_Dashboard = async (req, res) => {
-    try{
+    try {
         const userId = req.user._id;
 
         const resumeCount = await resume_Model.countDocuments({ user: userId });
@@ -17,7 +17,7 @@ const jobseeker_Dashboard = async (req, res) => {
             interviewCount
         });
 
-    }catch(error){
+    } catch (error) {
         console.error("Error fetching dashboard data:", error);
         res.status(500).json({ message: "Server error" });
     }
@@ -56,4 +56,4 @@ const interviewPerformances = async (req, res) => {
     }
 }
 
-export { jobseeker_Dashboard, resumeShow, interviewShow , interviewPerformances };
+export { jobseeker_Dashboard, resumeShow, interviewShow, interviewPerformances };

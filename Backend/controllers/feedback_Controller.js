@@ -12,7 +12,7 @@ const feedbackReciver = async (req, res) => {
 
         const feedback = await feedbackFrom.create({
             ...req.body,
-            user: user_id
+            username: user_id
         });
 
         res.status(201).json({

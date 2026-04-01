@@ -16,3 +16,5 @@ const upload = multer({storage: storage ,
         fileSize : 1024 * 1024 * 5
     },
 });
+
+export { upload as uploads };

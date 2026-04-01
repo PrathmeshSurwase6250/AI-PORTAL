@@ -1,15 +1,16 @@
 const authorizeRoles = (...roles) => {
     return (req, res, next) => {
         try {
-            if (!req.user) {
+            if (!req.user || !req.user_id) {
                 return res.status(401).json({
-                    message: "Not authorized"
+                    message: "Not authorized — please log in"
                 });
             }
 
-            if (!roles.includes(req.user.role)) {
+            const userRole = req.user.role;
+            if (!userRole || !roles.includes(userRole)) {
                 return res.status(403).json({
-                    message: "Access denied"
+                    message: `Access denied. Required role: ${roles.join(' or ')}. Your role: ${userRole || 'unknown'}`
                 });
             }
 

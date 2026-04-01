@@ -40,7 +40,7 @@ const Footer = () => {
           <div>
             <h3 className="font-heading font-semibold text-gray-900 mb-4">For Employers</h3>
             <ul className="space-y-3">
-              <li><Link to="/post-job" className="text-gray-500 hover:text-brand-600 text-sm transition">Post a Job</Link></li>
+              <li><Link to="/recruiter/post-job" className="text-gray-500 hover:text-brand-600 text-sm transition">Post a Job</Link></li>
               <li><Link to="/recruiter/dashboard" className="text-gray-500 hover:text-brand-600 text-sm transition">Recruiter Dashboard</Link></li>
               <li><Link to="/pricing" className="text-gray-500 hover:text-brand-600 text-sm transition">Pricing</Link></li>
             </ul>

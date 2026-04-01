@@ -99,7 +99,7 @@ const JobTable = () => {
                                     <td className="py-5 px-6 text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             <button 
-                                                onClick={() => navigate(`/recruiter/applicants` /* Deep link could be used: /recruiter/applicants?jobId=${job._id} */)}
+                                                onClick={() => navigate(`/recruiter/applicants/${job._id}`)}
                                                 className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors flex items-center gap-1 text-sm font-bold"
                                                 title="View Applicants"
                                             >

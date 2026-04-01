@@ -27,3 +27,5 @@ const askAi = async (messages)=>{
         throw error;
     }
 }
+
+export { askAi };

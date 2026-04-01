@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { IoCloseOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import ResumeSelector from './ResumeSelector';
+import InterviewSelector from './InterviewSelector';
 import { applyForJob } from '../../services/applicationApi';
 
 const ApplyJobModal = ({ job, onClose }) => {
   const [selectedResumeId, setSelectedResumeId] = useState(null);
+  const [selectedInterviewId, setSelectedInterviewId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState({ type: '', text: '' });
   const [success, setSuccess] = useState(false);
@@ -20,7 +22,7 @@ const ApplyJobModal = ({ job, onClose }) => {
       setLoading(true);
       setStatusMessage({ type: '', text: '' });
       
-      await applyForJob(job._id, selectedResumeId);
+      await applyForJob(job._id, selectedResumeId, selectedInterviewId);
       
       setSuccess(true);
       setStatusMessage({ type: 'success', text: 'Successfully applied for this position!' });
@@ -84,6 +86,11 @@ const ApplyJobModal = ({ job, onClose }) => {
                 <ResumeSelector 
                   selectedResumeId={selectedResumeId} 
                   onSelectResume={setSelectedResumeId} 
+                />
+
+                <InterviewSelector
+                    selectedInterviewId={selectedInterviewId}
+                    onSelectInterview={setSelectedInterviewId}
                 />
 
                 {statusMessage.text && (

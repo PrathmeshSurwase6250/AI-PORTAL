@@ -104,12 +104,6 @@ const showAllResume = async (req, res) => {
 
         const resumes = await resumeModel.find({ user: user_id });
 
-        if (resumes.length === 0) {
-            return res.status(404).json({
-                message: "No Resume Found"
-            });
-        }
-
         res.status(200).json({
             message: "All Resumes",
             resumes

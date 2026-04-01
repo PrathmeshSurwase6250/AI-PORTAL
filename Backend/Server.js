@@ -28,6 +28,8 @@ import feedbackRouter from "./routes/feedbackRouter.js";
 import jobseekerDashboardRouter from "./routes/jobseekerDashboardRouter.js";
 import resumeRoutes from "./routes/resumeRoutes.js";
 import jobPostingRouter from "./routes/jobPostingRouter.js";
+import interviewRouter from "./routes/interviewRouter.js";
+import applicationRoutes from "./routes/applicationRoutes.js";
 
 // Routes
 app.use("/api/auth", auth);
@@ -36,6 +38,8 @@ app.use("/api/feedback", feedbackRouter);
 app.use("/api/jobseeker", jobseekerDashboardRouter);
 app.use("/api/resume", resumeRoutes);
 app.use("/api/jobPosting", jobPostingRouter);
+app.use("/api/interview", interviewRouter);
+app.use("/api/application", applicationRoutes);
 
 // Test Route
 app.get("/", (req, res) => {

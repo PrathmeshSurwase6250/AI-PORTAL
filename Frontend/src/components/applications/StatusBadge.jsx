@@ -1,21 +1,32 @@
 import React from 'react';
+import { IoCheckmarkCircle, IoCloseCircle, IoTimeOutline } from 'react-icons/io5';
 
 const StatusBadge = ({ status }) => {
-  const getBadgeStyle = () => {
-    switch (status?.toLowerCase()) {
-      case 'accepted':
-        return 'bg-green-100 text-green-700 border-green-200';
-      case 'rejected':
-        return 'bg-red-100 text-red-700 border-red-200';
-      case 'pending':
-      default:
-        return 'bg-yellow-100 text-yellow-700 border-yellow-200';
-    }
+  const config = {
+    shortlisted: {
+      style: 'bg-green-50 text-green-700 border-green-200',
+      icon: <IoCheckmarkCircle className="shrink-0" />,
+      label: 'Shortlisted',
+    },
+    rejected: {
+      style: 'bg-red-50 text-red-600 border-red-200',
+      icon: <IoCloseCircle className="shrink-0" />,
+      label: 'Rejected',
+    },
+    applied: {
+      style: 'bg-yellow-50 text-yellow-700 border-yellow-200',
+      icon: <IoTimeOutline className="shrink-0" />,
+      label: 'Pending',
+    },
   };
 
+  const key = status?.toLowerCase();
+  const { style, icon, label } = config[key] || config.applied;
+
   return (
-    <span className={`px-3 py-1 text-xs font-bold uppercase rounded-full border ${getBadgeStyle()}`}>
-      {status || 'Pending'}
+    <span className={`px-3 py-1.5 text-xs font-bold rounded-full border flex items-center gap-1.5 w-max ${style}`}>
+      {icon}
+      {label}
     </span>
   );
 };

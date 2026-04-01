@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ServerURL } from '../App';
+import { ServerURL } from '../config/server';
 
 const getHeaders = () => {
     const token = localStorage.getItem("token");

@@ -28,3 +28,8 @@ export const getAllJobs = async () => {
     const response = await axios.get(`${ServerURL}/api/jobPosting/show-all-posts`, getHeaders());
     return response.data;
 };
+
+export const getJobById = async (job_id) => {
+    const response = await axios.get(`${ServerURL}/api/jobPosting/${job_id}`, getHeaders());
+    return response.data;
+};

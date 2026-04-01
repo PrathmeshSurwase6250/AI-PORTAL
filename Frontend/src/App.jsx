@@ -7,6 +7,7 @@ import axios from "axios";
 // Base Pages
 import Home from './pages/Home/Home'
 import Jobs from './pages/Jobs'
+import JobDetails from './pages/JobDetails'
 import InterviewHome from './pages/InterviewHome'
 import Auth from './pages/Auth'
 import Contact from './pages/Home/Contact'
@@ -84,6 +85,7 @@ const App = () => {
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/jobs" element={<Jobs />} />
+        <Route path="/jobs/:id" element={<JobDetails />} />
         <Route path="/interview" element={<InterviewHome />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/contact" element={<Contact />} />
@@ -111,6 +113,7 @@ const App = () => {
         <Route path="post-job" element={<PostJob />} />
         <Route path="manage-jobs" element={<ManageJobs />} />
         <Route path="applicants" element={<RecruiterApplicants />} />
+        <Route path="applicants/:jobId" element={<RecruiterApplicants />} />
         <Route path="company-profile" element={<CompanyProfile />} />
       </Route>
     </Routes>

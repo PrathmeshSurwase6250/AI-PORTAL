@@ -99,11 +99,12 @@ const JobseekerDashboard = () => {
                                 </div>
                             </motion.div>
 
+                            <Link to="/my-applications" className="block">
                             <motion.div 
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: 0.1 }}
-                                className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group"
+                                className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group hover:border-brand-200 hover:shadow-md transition-all"
                             >
                                 <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-brand-50 opacity-50 group-hover:scale-150 transition-transform duration-500 ease-out"></div>
                                 <div className="flex justify-between items-start relative z-10">
@@ -113,9 +114,11 @@ const JobseekerDashboard = () => {
                                     <div className="flex flex-col items-end">
                                         <span className="text-gray-500 text-sm font-bold tracking-wide uppercase mb-1">Applications</span>
                                         <h3 className="text-4xl font-heading font-extrabold text-gray-900">{stats.applicationCount}</h3>
+                                        <span className="text-xs text-brand-600 font-bold mt-1">View all →</span>
                                     </div>
                                 </div>
                             </motion.div>
+                            </Link>
 
                             <motion.div 
                                 initial={{ opacity: 0, y: 20 }}

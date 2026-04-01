@@ -1,7 +1,7 @@
 import {  analyzeResume , generateQuestions , submitAnswer , finishInterview  ,  getMyInterviews , getReport} from "../controllers/interview.js";
 import express from "express";
-import {uploads} from "../middleware/multer.js";
-import auth from "../middleware/auth.js";
+import {uploads} from "../middelwares/multer.js";
+import auth from "../middelwares/auth.js";
 
 
 const router = express.Router();

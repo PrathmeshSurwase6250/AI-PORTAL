@@ -107,12 +107,6 @@ const showAllPost = async (req, res) => {
     try {
         const allJobPosting = await jobModel.find({});
 
-        if (allJobPosting.length === 0) {
-            return res.status(404).json({
-                message: "No Job Posts Found"
-            });
-        }
-
         res.status(200).json({
             message: "All Job Posting",
             allJobPosting
@@ -125,9 +119,23 @@ const showAllPost = async (req, res) => {
     }
 };
 
+// GET JOB BY ID
+const getJobById = async (req, res) => {
+    try {
+        const job = await jobModel.findById(req.params.id);
+        if (!job) {
+            return res.status(404).json({ message: "Job not found" });
+        }
+        res.status(200).json({ job });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
 export default {
     createJobPost,
     updatedJobPost,
     deletedJobPost,
-    showAllPost
+    showAllPost,
+    getJobById
 };

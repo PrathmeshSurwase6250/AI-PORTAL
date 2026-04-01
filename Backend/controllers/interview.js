@@ -1,8 +1,8 @@
 import interview_Model from "../models/interview_Model.js";
 import fs from "fs";
-import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.js";
+import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { askAi } from "../services/openRouter.js";
-import User from "../models/user.js";
+import User from "../models/auth_Model.js";
 
 
 const analyzeResume = async (req, res) => {
@@ -86,7 +86,7 @@ const generateQuestions = async (req, res) => {
     experience = experience.trim();
     mode = mode.trim();
 
-    const user = await User.findById(req.user.id);
+    const user = await User.findById(req.user_id);
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -141,7 +141,7 @@ If you do not follow instructions exactly, the interview system will fail.`
     }
 
     const interview = await interview_Model.create({
-      user: req.user.id,
+      user: req.user_id,
       role,
       experience,
       mode,
@@ -321,7 +321,7 @@ const finishInterview = async (req, res) => {
 const getMyInterviews = async (req, res) => {
   try {
     const interviews = await interview_Model
-      .find({ user: req.user.id })
+      .find({ user: req.user_id })
       .sort({ createdAt: -1 })
       .select("role experience mode createdAt status finalScore");
 

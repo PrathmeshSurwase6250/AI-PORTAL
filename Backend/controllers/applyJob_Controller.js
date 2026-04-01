@@ -5,7 +5,7 @@ import ApplicationModel from "../models/application_Model.js";
 const applyJob = async (req, res) => {
     try {
         const user_id = req.user_id;
-        const { job_id, resume_id } = req.body;
+        const { job_id, resume_id, interview_id } = req.body;
 
         if (!mongoose.Types.ObjectId.isValid(job_id)) {
             return res.status(400).json({
@@ -27,7 +27,8 @@ const applyJob = async (req, res) => {
         const application = await ApplicationModel.create({
             user: user_id,
             job: job_id,
-            resume: resume_id
+            resume: resume_id,
+            ...(interview_id ? { interview: interview_id } : {})
         });
 
         res.status(201).json({
@@ -52,12 +53,6 @@ const myApplications = async (req, res) => {
             .populate("job")
             .populate("resume");
 
-        if (myApplications.length === 0) {
-            return res.status(404).json({
-                message: "Not Applied For Any Job!"
-            });
-        }
-
         res.status(200).json({
             message: "Your Applications",
             myApplications
@@ -78,7 +73,8 @@ const jobApplications = async (req, res) => {
         const applications = await ApplicationModel
             .find({ job: job_id })
             .populate("user")
-            .populate("resume");
+            .populate("resume")
+            .populate("interview");
 
         if (applications.length === 0) {
             return res.status(404).json({
@@ -122,9 +118,46 @@ const updateApplicationStatus = async (req, res) => {
     }
 };
 
+/* Check If Already Applied */
+const checkApplication = async (req, res) => {
+    try {
+        const user_id = req.user_id;
+        const { job_id } = req.params;
+
+        const existing = await ApplicationModel.findOne({ user: user_id, job: job_id });
+
+        res.status(200).json({
+            applied: !!existing,
+            application_id: existing?._id || null
+        });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
+/* Withdraw Application */
+const withdrawApplication = async (req, res) => {
+    try {
+        const user_id = req.user_id;
+        const { job_id } = req.params;
+
+        const deleted = await ApplicationModel.findOneAndDelete({ user: user_id, job: job_id });
+
+        if (!deleted) {
+            return res.status(404).json({ message: "Application not found" });
+        }
+
+        res.status(200).json({ message: "Application withdrawn successfully" });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
 export {
     applyJob,
     myApplications,
     jobApplications,
-    updateApplicationStatus
+    updateApplicationStatus,
+    checkApplication,
+    withdrawApplication
 };

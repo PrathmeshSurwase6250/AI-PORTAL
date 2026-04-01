@@ -1,5 +1,5 @@
 import jobPostingController from "../controllers/jobPosting_controlller.js";
-const { createJobPost, updatedJobPost, deletedJobPost, showAllPost } = jobPostingController;
+const { createJobPost, updatedJobPost, deletedJobPost, showAllPost, getJobById } = jobPostingController;
 
 import express from "express";
 
@@ -16,5 +16,7 @@ router.put("/update-job-post/:post_id", authMiddleware, role("recruiter"), updat
 router.delete("/delete-job-post/:post_id", authMiddleware, role("recruiter"), deletedJobPost);
 
 router.get("/show-all-posts", showAllPost);
+
+router.get("/:id", getJobById);
 
 export default router;

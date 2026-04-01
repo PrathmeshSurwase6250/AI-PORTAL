@@ -16,7 +16,8 @@ const JobForm = ({ initialData = null, onSubmit, loading, successMsg }) => {
         company_information: '',
         educational_qualification: '',
         role_about: '',
-        role_responsibilities: ''
+        role_responsibilities: '',
+        company_logo: ''
     });
 
     useEffect(() => {
@@ -35,7 +36,8 @@ const JobForm = ({ initialData = null, onSubmit, loading, successMsg }) => {
                 company_information: Array.isArray(initialData.company_information) ? initialData.company_information.join(', ') : (initialData.company_information || ''),
                 educational_qualification: Array.isArray(initialData.educational_qualification) ? initialData.educational_qualification.join(', ') : (initialData.educational_qualification || ''),
                 role_about: initialData.role_about || '',
-                role_responsibilities: initialData.role_responsibilities || ''
+                role_responsibilities: initialData.role_responsibilities || '',
+                company_logo: initialData.company_logo?.url || ''
             });
         }
     }, [initialData]);
@@ -62,6 +64,16 @@ const JobForm = ({ initialData = null, onSubmit, loading, successMsg }) => {
         
         // Number Parsing
         submissionData.numberOfOpening = parseInt(submissionData.numberOfOpening, 10) || 1;
+        
+        // Map Logo URL
+        if (submissionData.company_logo && typeof submissionData.company_logo === 'string') {
+            submissionData.company_logo = {
+                filename: "custom_logo",
+                url: submissionData.company_logo
+            };
+        } else {
+            delete submissionData.company_logo; // Let Mongoose use the default Avatar
+        }
         
         onSubmit(submissionData);
     };
@@ -123,6 +135,18 @@ const JobForm = ({ initialData = null, onSubmit, loading, successMsg }) => {
                             className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
                         />
                     </div>
+                </div>
+
+                <div>
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Company Logo URL (Optional)</label>
+                    <input 
+                        type="url" 
+                        name="company_logo" 
+                        value={formData.company_logo} 
+                        onChange={handleChange} 
+                        placeholder="e.g. https://example.com/logo.png" 
+                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
+                    />
                 </div>
 
                 <div>

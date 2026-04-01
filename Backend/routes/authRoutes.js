@@ -1,14 +1,12 @@
-import { userlogin, signUp, logout, googleAuth } from "../controllers/auth_Controller.js";
-import express from "express" ;
+import { userlogin, signUp, logout, googleAuth, adminLogin } from "../controllers/auth_Controller.js";
+import express from "express";
 
-const router = express.Router() ;
+const router = express.Router();
 
-router.post("/login" , userlogin) ; 
+router.post("/login",        userlogin);
+router.post("/sign",         signUp);
+router.post("/google",       googleAuth);
+router.post("/admin-login",  adminLogin);
+router.get("/logout",        logout);
 
-router.post("/sign" , signUp);
-
-router.post("/google", googleAuth);
-
-router.get("/logout" , logout ) ;
-
-export default router ;
+export default router;

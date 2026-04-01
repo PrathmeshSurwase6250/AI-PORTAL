@@ -1,148 +1,212 @@
 import React, { useState, useEffect } from 'react';
-import { getAllJobs, deleteJobPost } from '../../services/jobApi';
-import { IoPencilOutline, IoTrashOutline, IoPeopleOutline } from 'react-icons/io5';
+import { useSelector } from 'react-redux';
+import { motion, AnimatePresence } from 'motion/react';
+import {
+    IoPencilOutline, IoTrashOutline, IoPeopleOutline,
+    IoBriefcaseOutline, IoLocationOutline, IoCashOutline,
+    IoTimeOutline, IoPersonOutline, IoAddOutline,
+} from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import EditJobModal from './EditJobModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import axios from 'axios';
+import { ServerURL } from '../../App';
+
+const getHeaders = () => ({
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    withCredentials: true,
+});
+
+const typeBadge = (type) => ({
+    'Full-time': 'bg-green-100 text-green-700',
+    'Part-time': 'bg-blue-100  text-blue-700',
+    'Remote':    'bg-purple-100 text-purple-700',
+    'Internship':'bg-amber-100 text-amber-700',
+    'Contract':  'bg-rose-100  text-rose-700',
+}[type] || 'bg-gray-100 text-gray-600');
 
 const JobTable = () => {
-    const [jobs, setJobs] = useState([]);
-    const [loading, setLoading] = useState(true);
-    
-    // Modal states
-    const [editJob, setEditJob] = useState(null);
-    const [deleteJob, setDeleteJob] = useState(null);
+    const [jobs, setJobs]               = useState([]);
+    const [loading, setLoading]         = useState(true);
+    const [editJob, setEditJob]         = useState(null);
+    const [deleteJob, setDeleteJob]     = useState(null);
     const [deleteLoading, setDeleteLoading] = useState(false);
+    const [expandedId, setExpandedId]   = useState(null);
 
-    const navigate = useNavigate();
+    const navigate  = useNavigate();
+    const user      = useSelector(s => s.user?.userData);
 
     const fetchJobs = async () => {
         try {
             setLoading(true);
-            const data = await getAllJobs();
-            // In a real app we might filter only jobs created by THIS recruiter. 
-            // For now, assume getAllJobs brings back what they are allowed to see or we filter locally if needed.
-            setJobs(data.allJobPosting || []);
+            const res = await axios.get(`${ServerURL}/api/jobPosting/my-jobs`, getHeaders());
+            setJobs(res.data.jobs || []);
         } catch (err) {
-            console.error("Failed to load jobs:", err);
+            console.error('Failed to load my jobs:', err);
         } finally {
             setLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchJobs();
-    }, []);
+    useEffect(() => { fetchJobs(); }, []);
 
     const handleDeleteConfirm = async () => {
         if (!deleteJob) return;
         try {
             setDeleteLoading(true);
-            await deleteJobPost(deleteJob._id);
-            setJobs(jobs.filter(j => j._id !== deleteJob._id));
+            await axios.delete(`${ServerURL}/api/jobPosting/delete-job-post/${deleteJob._id}`, getHeaders());
+            setJobs(prev => prev.filter(j => j._id !== deleteJob._id));
             setDeleteJob(null);
         } catch (err) {
             console.error(err);
-            alert("Failed to delete job.");
+            alert('Failed to delete job.');
         } finally {
             setDeleteLoading(false);
         }
     };
 
-    return (
-        <div className="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
-            <div className="overflow-x-auto">
-                <table className="w-full text-left whitespace-nowrap">
-                    <thead className="bg-gray-50/50 border-b border-gray-100">
-                        <tr>
-                            <th className="py-5 px-6 font-bold text-gray-500 text-sm uppercase tracking-wider">Job Title</th>
-                            <th className="py-5 px-6 font-bold text-gray-500 text-sm uppercase tracking-wider">Type & Location</th>
-                            <th className="py-5 px-6 font-bold text-gray-500 text-sm uppercase tracking-wider">Salary Estimate</th>
-                            <th className="py-5 px-6 font-bold text-gray-500 text-sm uppercase tracking-wider text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-100">
-                        {loading ? (
-                            [...Array(3)].map((_, i) => (
-                                <tr key={i} className="animate-pulse">
-                                    <td className="py-5 px-6"><div className="h-6 bg-gray-100 rounded w-48"></div><div className="h-4 bg-gray-100 rounded w-24 mt-2"></div></td>
-                                    <td className="py-5 px-6"><div className="h-4 bg-gray-100 rounded w-32"></div></td>
-                                    <td className="py-5 px-6"><div className="h-4 bg-gray-100 rounded w-24"></div></td>
-                                    <td className="py-5 px-6"><div className="h-8 bg-gray-100 rounded w-32 float-right"></div></td>
-                                </tr>
-                            ))
-                        ) : jobs.length === 0 ? (
-                            <tr>
-                                <td colSpan="4" className="py-12 text-center text-gray-500 font-medium">
-                                    <p className="text-gray-900 font-bold text-lg mb-1">No Jobs Posted Yet</p>
-                                    <p className="text-sm">Click "Post New Job" from the sidebar to start hiring.</p>
-                                </td>
-                            </tr>
-                        ) : (
-                            jobs.map(job => (
-                                <tr key={job._id} className="hover:bg-gray-50/50 transition-colors">
-                                    <td className="py-5 px-6">
-                                        <p className="font-bold text-gray-900">{job.job_title}</p>
-                                        <p className="text-xs font-medium text-gray-500 mt-1 uppercase tracking-wide">Exp: {job.experience}</p>
-                                    </td>
-                                    <td className="py-5 px-6">
-                                        <div className="flex flex-col gap-1">
-                                            <span className="inline-flex w-max px-2.5 py-1 rounded-full text-xs font-bold bg-indigo-50 text-indigo-700">
-                                                {job.job_type}
-                                            </span>
-                                            <span className="text-sm text-gray-500">{job.company_location}</span>
-                                        </div>
-                                    </td>
-                                    <td className="py-5 px-6 text-sm font-medium text-gray-700">
-                                        {job.salary}
-                                    </td>
-                                    <td className="py-5 px-6 text-right">
-                                        <div className="flex items-center justify-end gap-2">
-                                            <button 
-                                                onClick={() => navigate(`/recruiter/applicants/${job._id}`)}
-                                                className="p-2 text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors flex items-center gap-1 text-sm font-bold"
-                                                title="View Applicants"
-                                            >
-                                                <IoPeopleOutline size={18} /> <span className="hidden sm:inline">Applicants</span>
-                                            </button>
-                                            <div className="w-px h-6 bg-gray-200 mx-1"></div>
-                                            <button 
-                                                onClick={() => setEditJob(job)}
-                                                className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors"
-                                                title="Edit Job"
-                                            >
-                                                <IoPencilOutline size={18} />
-                                            </button>
-                                            <button 
-                                                onClick={() => setDeleteJob(job)}
-                                                className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                                                title="Delete Job"
-                                            >
-                                                <IoTrashOutline size={18} />
-                                            </button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            ))
-                        )}
-                    </tbody>
-                </table>
+    if (loading) return (
+        <div className="space-y-3">
+            {[1, 2, 3].map(i => (
+                <div key={i} className="bg-white rounded-2xl border border-gray-100 p-5 animate-pulse">
+                    <div className="h-5 bg-gray-100 rounded w-48 mb-2" />
+                    <div className="h-3 bg-gray-100 rounded w-32" />
+                </div>
+            ))}
+        </div>
+    );
+
+    if (jobs.length === 0) return (
+        <div className="bg-white rounded-3xl border border-gray-100 p-16 text-center shadow-sm">
+            <div className="w-16 h-16 bg-indigo-50 rounded-3xl flex items-center justify-center mx-auto mb-4">
+                <IoBriefcaseOutline className="text-3xl text-indigo-300" />
             </div>
+            <h3 className="text-lg font-bold text-gray-900 mb-2">No Jobs Posted Yet</h3>
+            <p className="text-sm text-gray-400 mb-5">Post your first opening to start receiving candidates.</p>
+            <button onClick={() => navigate('/recruiter/post-job')}
+                className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-700 transition text-sm">
+                <IoAddOutline /> Post a Job
+            </button>
+        </div>
+    );
+
+    return (
+        <div className="space-y-3">
+            {jobs.map((job, idx) => {
+                const isExpanded = expandedId === job._id;
+                return (
+                    <motion.div key={job._id}
+                        initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: idx * 0.04 }}
+                        className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+                        {/* Main row */}
+                        <div className="p-5 flex flex-col md:flex-row md:items-center gap-4 justify-between">
+                            {/* Left: job info */}
+                            <div className="flex items-start gap-4">
+                                <div className="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl shrink-0">
+                                    <IoBriefcaseOutline />
+                                </div>
+                                <div>
+                                    <h3 className="font-bold text-gray-900 text-base">{job.job_title}</h3>
+                                    <div className="flex flex-wrap items-center gap-2 mt-1">
+                                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${typeBadge(job.job_type)}`}>
+                                            {job.job_type}
+                                        </span>
+                                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                                            <IoLocationOutline /> {job.company_location}
+                                        </span>
+                                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                                            <IoCashOutline /> {job.salary}
+                                        </span>
+                                        <span className="text-xs text-gray-400 flex items-center gap-1">
+                                            <IoTimeOutline /> Exp: {job.experience}
+                                        </span>
+                                    </div>
+                                    {/* Recruiter identity */}
+                                    <p className="text-xs text-indigo-500 font-semibold mt-1 flex items-center gap-1">
+                                        <IoPersonOutline />
+                                        Posted by: {job.user?.username || 'You'} ({job.user?.email || ''})
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Right: actions */}
+                            <div className="flex items-center gap-2 shrink-0 ml-auto">
+                                <button onClick={() => navigate(`/recruiter/applicants/${job._id}`)}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-indigo-50 text-indigo-700 font-bold rounded-xl hover:bg-indigo-100 transition text-xs">
+                                    <IoPeopleOutline /> Applicants
+                                </button>
+                                <button onClick={() => setExpandedId(isExpanded ? null : job._id)}
+                                    className="px-3 py-1.5 text-xs font-bold text-gray-500 border border-gray-200 rounded-xl hover:border-indigo-300 hover:text-indigo-600 transition">
+                                    {isExpanded ? 'Hide' : 'Details'}
+                                </button>
+                                <button onClick={() => setEditJob(job)}
+                                    className="p-2 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition">
+                                    <IoPencilOutline size={17} />
+                                </button>
+                                <button onClick={() => setDeleteJob(job)}
+                                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition">
+                                    <IoTrashOutline size={17} />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* Expanded: full job details */}
+                        <AnimatePresence>
+                            {isExpanded && (
+                                <motion.div initial={{ height: 0 }} animate={{ height: 'auto' }} exit={{ height: 0 }}
+                                    className="overflow-hidden">
+                                    <div className="border-t border-gray-100 px-5 py-5 grid grid-cols-1 md:grid-cols-2 gap-5">
+                                        {/* Skills */}
+                                        {job.skills_Required?.length > 0 && (
+                                            <div>
+                                                <p className="text-xs font-bold text-gray-500 uppercase mb-2">Skills Required</p>
+                                                <div className="flex flex-wrap gap-1.5">
+                                                    {job.skills_Required.map((s, i) => (
+                                                        <span key={i} className="px-2.5 py-1 bg-indigo-50 text-indigo-700 text-xs font-bold rounded-full">{s}</span>
+                                                    ))}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {/* Description */}
+                                        {job.job_Description && (
+                                            <div>
+                                                <p className="text-xs font-bold text-gray-500 uppercase mb-2">Description</p>
+                                                <p className="text-sm text-gray-700 leading-relaxed line-clamp-4">{job.job_Description}</p>
+                                            </div>
+                                        )}
+                                        {/* Posted on */}
+                                        <div>
+                                            <p className="text-xs font-bold text-gray-500 uppercase mb-1">Posted On</p>
+                                            <p className="text-sm text-gray-700">
+                                                {new Date(job.createdAt).toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' })}
+                                            </p>
+                                        </div>
+                                        {/* Company */}
+                                        {job.company_name && (
+                                            <div>
+                                                <p className="text-xs font-bold text-gray-500 uppercase mb-1">Company</p>
+                                                <p className="text-sm text-gray-700 font-semibold">{job.company_name}</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+                    </motion.div>
+                );
+            })}
 
             {/* Modals */}
-            <EditJobModal 
-                isOpen={!!editJob} 
-                job={editJob} 
-                onClose={() => setEditJob(null)} 
-                onRefresh={fetchJobs} 
+            <EditJobModal
+                isOpen={!!editJob} job={editJob}
+                onClose={() => setEditJob(null)} onRefresh={fetchJobs}
             />
-            
-            <DeleteConfirmModal 
-                isOpen={!!deleteJob}
-                jobTitle={deleteJob?.job_title}
+            <DeleteConfirmModal
+                isOpen={!!deleteJob} jobTitle={deleteJob?.job_title}
                 loading={deleteLoading}
-                onClose={() => setDeleteJob(null)}
-                onConfirm={handleDeleteConfirm}
+                onClose={() => setDeleteJob(null)} onConfirm={handleDeleteConfirm}
             />
         </div>
     );

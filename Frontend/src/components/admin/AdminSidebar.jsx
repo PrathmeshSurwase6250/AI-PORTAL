@@ -6,11 +6,24 @@ import {
   IoBriefcaseOutline, 
   IoDocumentTextOutline, 
   IoChatbubbleEllipsesOutline,
-  IoSettingsOutline 
+  IoSettingsOutline,
+  IoLogOutOutline 
 } from 'react-icons/io5';
 import { BsRobot } from 'react-icons/bs';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setUserData } from '../../redux/userSlice';
 
 const AdminSidebar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    dispatch(setUserData(null));
+    navigate("/auth");
+  };
+
   const menuItems = [
     { name: 'Dashboard', path: '/admin', icon: <IoGridOutline />, exact: true },
     { name: 'Users', path: '/admin/users', icon: <IoPeopleOutline /> },
@@ -70,6 +83,13 @@ const AdminSidebar = () => {
             <IoSettingsOutline className="text-xl group-hover:rotate-45 transition-transform duration-300" />
             <span className="tracking-wide text-sm">Settings</span>
         </NavLink>
+        <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-red-500 hover:bg-red-50 transition-all duration-200 group mt-1"
+          >
+            <IoLogOutOutline className="text-xl group-hover:-translate-x-1 transition-transform duration-300" />
+            <span className="tracking-wide text-sm font-bold">Logout</span>
+        </button>
       </div>
     </aside>
   );

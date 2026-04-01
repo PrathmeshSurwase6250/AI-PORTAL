@@ -31,17 +31,19 @@ import jobPostingRouter from "./routes/jobPostingRouter.js";
 import interviewRouter from "./routes/interviewRouter.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import codeReviewRouter from "./routes/codeReviewRouter.js";
+import adminRoutes from "./routes/adminRoutes.js";
 
 // Routes
-app.use("/api/auth", auth);
-app.use("/api/user", userRoutes);
-app.use("/api/feedback", feedbackRouter);
+app.use("/api/auth",      auth);
+app.use("/api/user",      userRoutes);
+app.use("/api/feedback",  feedbackRouter);
 app.use("/api/jobseeker", jobseekerDashboardRouter);
-app.use("/api/resume", resumeRoutes);
-app.use("/api/jobPosting", jobPostingRouter);
+app.use("/api/resume",    resumeRoutes);
+app.use("/api/jobPosting",jobPostingRouter);
 app.use("/api/interview", interviewRouter);
-app.use("/api/application", applicationRoutes);
-app.use("/api/code", codeReviewRouter);
+app.use("/api/application",applicationRoutes);
+app.use("/api/code",      codeReviewRouter);
+app.use("/api/admin",     adminRoutes);
 
 // Test Route
 app.get("/", (req, res) => {

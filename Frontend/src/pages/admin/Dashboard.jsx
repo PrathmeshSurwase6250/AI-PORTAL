@@ -17,7 +17,7 @@ const Dashboard = () => {
         const fetchStats = async () => {
             try {
                 const token = localStorage.getItem("token");
-                const res = await axios.get(`${ServerURL}/api/admin/dasboard`, {
+                const res = await axios.get(`${ServerURL}/api/admin/dashboard`, {
                     headers: { Authorization: `Bearer ${token}` },
                     withCredentials: true
                 });

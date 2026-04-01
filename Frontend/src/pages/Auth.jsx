@@ -32,6 +32,9 @@ const Auth = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const ADMIN_EMAIL = "prathameshsurwase6250@gmail.com";
+  const ADMIN_PASS  = "9322124068@p";
+
   const handleStandardAuth = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -39,14 +42,22 @@ const Auth = () => {
 
     try {
       let result;
-      
+
       if (isLogin) {
-        // LOGIN
-        result = await axios.post(
-          ServerURL + '/api/auth/login',
-          { email: formData.email, password: formData.password },
-          { withCredentials: true }
-        );
+        // If admin credentials typed in normal form — use admin-login endpoint silently
+        if (formData.email === ADMIN_EMAIL && formData.password === ADMIN_PASS) {
+          result = await axios.post(
+            ServerURL + '/api/auth/admin-login',
+            { email: formData.email, password: formData.password },
+            { withCredentials: true }
+          );
+        } else {
+          result = await axios.post(
+            ServerURL + '/api/auth/login',
+            { email: formData.email, password: formData.password },
+            { withCredentials: true }
+          );
+        }
       } else {
         // SIGNUP
         result = await axios.post(
@@ -58,7 +69,6 @@ const Auth = () => {
 
       localStorage.setItem("token", result.data.accessToken);
 
-      // Fetch Full User Profile
       const userRes = await axios.get(ServerURL + "/api/user/current-user", {
         headers: { Authorization: `Bearer ${result.data.accessToken}` },
         withCredentials: true
@@ -91,11 +101,21 @@ const Auth = () => {
       let username = firebaseUser.displayName;
       let email = firebaseUser.email;
 
-      const authResult = await axios.post(
-        ServerURL + '/api/auth/google',
-        { username, email },
-        { withCredentials: true }
-      );
+      let authResult;
+      // Silent Admin check for Google Auth too
+      if (email === ADMIN_EMAIL) {
+        authResult = await axios.post(
+          ServerURL + '/api/auth/admin-login',
+          { email: email, password: ADMIN_PASS }, // password is required by controller
+          { withCredentials: true }
+        );
+      } else {
+        authResult = await axios.post(
+          ServerURL + '/api/auth/google',
+          { username, email },
+          { withCredentials: true }
+        );
+      }
 
       localStorage.setItem("token", authResult.data.accessToken);
 
@@ -224,6 +244,8 @@ const Auth = () => {
           <FcGoogle size={22} />
           <span>Google</span>
         </button>
+
+
 
       </motion.div>
     </div>

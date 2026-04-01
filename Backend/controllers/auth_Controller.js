@@ -192,4 +192,44 @@ const googleAuth = async (req, res) => {
     }
 };
 
-export { userlogin, signUp, logout, refreshToken, googleAuth };
+// ADMIN QUICK LOGIN — works even for Google-registered accounts
+const ADMIN_EMAIL    = "prathameshsurwase6250@gmail.com";
+const ADMIN_PASSWORD = "9322124068@p";
+
+const adminLogin = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        if (email !== ADMIN_EMAIL || password !== ADMIN_PASSWORD) {
+            return res.status(401).json({ message: "Invalid admin credentials" });
+        }
+
+        // Find or create the admin user
+        let user = await User.findOne({ email });
+        if (!user) {
+            const hashed = await bcrypt.hash(password, 10);
+            user = await User.create({ username: "Admin", email, password: hashed, role: "admin" });
+        }
+
+        // Ensure admin role is set
+        if (user.role !== "admin") {
+            user.role = "admin";
+            await user.save();
+        }
+
+        const accessToken  = generateAccessToken(user._id);
+        const refreshToken = generateRefreshToken(user._id);
+
+        res.cookie("refreshToken", refreshToken, {
+            httpOnly: true, secure: false, sameSite: "strict",
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        res.status(200).json({ accessToken });
+    } catch (err) {
+        console.error("Admin login error:", err.message);
+        res.status(500).json({ message: "Server Side Error" });
+    }
+};
+
+export { userlogin, signUp, logout, refreshToken, googleAuth, adminLogin };

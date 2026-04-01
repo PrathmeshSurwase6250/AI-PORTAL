@@ -102,20 +102,28 @@ const deletedJobPost = async (req, res) => {
     }
 };
 
-// SHOW ALL JOB POSTS
+// SHOW ALL JOB POSTS (public)
 const showAllPost = async (req, res) => {
     try {
-        const allJobPosting = await jobModel.find({});
-
-        res.status(200).json({
-            message: "All Job Posting",
-            allJobPosting
-        });
-
+        const allJobPosting = await jobModel.find({}).populate('user', 'username email');
+        res.status(200).json({ message: "All Job Posting", allJobPosting });
     } catch (err) {
-        res.status(500).json({
-            message: "Server Side Error!"
-        });
+        res.status(500).json({ message: "Server Side Error!" });
+    }
+};
+
+// MY JOBS — only jobs posted by the logged-in recruiter
+const getMyJobs = async (req, res) => {
+    try {
+        const user_id = req.user_id;
+        const myJobs = await jobModel
+            .find({ user: user_id })
+            .populate('user', 'username email')
+            .sort({ createdAt: -1 });
+        res.status(200).json({ jobs: myJobs });
+    } catch (err) {
+        console.error('getMyJobs error:', err.message);
+        res.status(500).json({ message: 'Server Side Error!' });
     }
 };
 
@@ -139,3 +147,4 @@ export default {
     showAllPost,
     getJobById
 };
+export { getMyJobs };

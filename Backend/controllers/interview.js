@@ -1,8 +1,15 @@
 import interview_Model from "../models/interview_Model.js";
 import fs from "fs";
+import { createRequire } from "module";
 import * as pdfjsLib from "pdfjs-dist/legacy/build/pdf.mjs";
 import { askAi } from "../services/openRouter.js";
 import User from "../models/auth_Model.js";
+
+// pdfjs-dist v5 requires workerSrc in Node.js — path is relative to this file's directory
+pdfjsLib.GlobalWorkerOptions.workerSrc = new URL(
+  "../node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs",
+  import.meta.url
+).href;
 
 
 const analyzeResume = async (req, res) => {
@@ -51,10 +58,14 @@ Return strictly JSON:
 
     let parsed;
     try {
-      parsed = JSON.parse(askAiResponse);
+      // Strip markdown fences the AI sometimes adds around JSON
+      const cleaned = askAiResponse.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('No JSON object found in AI response');
+      parsed = JSON.parse(jsonMatch[0]);
     } catch (err) {
       console.log("AI JSON Parse Error:", askAiResponse);
-      return res.status(500).json({ error: "AI returned invalid JSON" });
+      return res.status(500).json({ error: "AI returned invalid JSON for resume analysis" });
     }
 
     fs.unlinkSync(filepath);
@@ -159,8 +170,8 @@ If you do not follow instructions exactly, the interview system will fail.`
     });
 
   } catch (error) {
-    console.error("Error in generateQuestions:", error.message);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("Error in generateQuestions:", error.message, error.stack);
+    res.status(500).json({ error: error.message || "Internal server error in generateQuestions" });
   }
 };
 
@@ -235,10 +246,13 @@ Answer: ${answer}`
 
     let parsed;
     try {
-      parsed = JSON.parse(aiResponse);
+      const cleaned = aiResponse.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) throw new Error('No JSON in AI evaluation response');
+      parsed = JSON.parse(jsonMatch[0]);
     } catch (err) {
-      console.log("AI JSON Parse Error:", aiResponse);
-      return res.status(500).json({ error: "AI returned invalid JSON" });
+      console.log("AI JSON Parse Error (submitAnswer):", aiResponse);
+      return res.status(500).json({ error: "AI returned invalid JSON during evaluation" });
     }
 
     question.answer = answer;
@@ -376,11 +390,104 @@ const getReport = async (req, res) => {
   }
 };
 
+const getFullInterview = async (req, res) => {
+  try {
+    const { interviewId } = req.params;
+    const interview = await interview_Model.findById(interviewId);
+    if (!interview) return res.status(404).json({ error: "Interview not found" });
+
+    // Verify this interview belongs to this user
+    if (interview.user.toString() !== req.user_id.toString()) {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
+    const totalQ = interview.questions.length || 1;
+    const avgScore         = (interview.questions.reduce((s, q) => s + (q.score         || 0), 0) / totalQ).toFixed(1);
+    const avgConfidence    = (interview.questions.reduce((s, q) => s + (q.confidence    || 0), 0) / totalQ).toFixed(1);
+    const avgCommunication = (interview.questions.reduce((s, q) => s + (q.communication || 0), 0) / totalQ).toFixed(1);
+    const avgCorrectness   = (interview.questions.reduce((s, q) => s + (q.correctness   || 0), 0) / totalQ).toFixed(1);
+
+    res.status(200).json({
+      _id:           interview._id,
+      role:          interview.role,
+      experience:    interview.experience,
+      mode:          interview.mode,
+      status:        interview.status,
+      finalScore:    interview.finalScore,
+      createdAt:     interview.createdAt,
+      avgConfidence:    Number(avgConfidence),
+      avgCommunication: Number(avgCommunication),
+      avgCorrectness:   Number(avgCorrectness),
+      questions: interview.questions.map((q) => ({
+        _id:           q._id,
+        question:      q.question,
+        difficulty:    q.difficulty,
+        timelimit:     q.timelimit,
+        answer:        q.answer   || '',
+        feedback:      q.feedback || '',
+        score:         q.score         || 0,
+        confidence:    q.confidence    || 0,
+        communication: q.communication || 0,
+        correctness:   q.correctness   || 0,
+      }))
+    });
+  } catch (error) {
+    console.error("Error in getFullInterview:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+// ── Recruiter: view a candidate's full interview history ─────────────────────
+const getCandidateInterviews = async (req, res) => {
+  try {
+    const { candidateId } = req.params;
+
+    const interviews = await interview_Model
+      .find({ user: candidateId })
+      .sort({ createdAt: -1 });
+
+    const formatted = interviews.map(iv => {
+      const totalQ = iv.questions.length || 1;
+      return {
+        _id:              iv._id,
+        role:             iv.role,
+        experience:       iv.experience,
+        mode:             iv.mode,
+        status:           iv.status,
+        finalScore:       iv.finalScore || 0,
+        createdAt:        iv.createdAt,
+        avgConfidence:    Number((iv.questions.reduce((s, q) => s + (q.confidence    || 0), 0) / totalQ).toFixed(1)),
+        avgCommunication: Number((iv.questions.reduce((s, q) => s + (q.communication || 0), 0) / totalQ).toFixed(1)),
+        avgCorrectness:   Number((iv.questions.reduce((s, q) => s + (q.correctness   || 0), 0) / totalQ).toFixed(1)),
+        questions: iv.questions.map(q => ({
+          _id:           q._id,
+          question:      q.question,
+          difficulty:    q.difficulty,
+          timelimit:     q.timelimit,
+          answer:        q.answer        || '',
+          feedback:      q.feedback      || '',
+          score:         q.score         || 0,
+          confidence:    q.confidence    || 0,
+          communication: q.communication || 0,
+          correctness:   q.correctness   || 0,
+        }))
+      };
+    });
+
+    res.status(200).json({ interviews: formatted });
+  } catch (error) {
+    console.error("Error in getCandidateInterviews:", error.message);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export {
   analyzeResume,
   generateQuestions,
   submitAnswer,
   finishInterview,
   getMyInterviews,
-  getReport
+  getReport,
+  getFullInterview,
+  getCandidateInterviews
 };

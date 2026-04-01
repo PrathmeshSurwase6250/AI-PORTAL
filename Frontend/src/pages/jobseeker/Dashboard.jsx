@@ -123,11 +123,8 @@ const JobseekerDashboard = () => {
                             </motion.div>
                             </Link>
 
-                            <motion.div 
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.2 }}
-                                className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group"
+                            <Link to="/my-interviews"
+                                className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm relative overflow-hidden group hover:border-purple-200 transition"
                             >
                                 <div className="absolute -right-6 -top-6 w-24 h-24 rounded-full bg-purple-50 opacity-50 group-hover:scale-150 transition-transform duration-500 ease-out"></div>
                                 <div className="flex justify-between items-start relative z-10">
@@ -137,9 +134,10 @@ const JobseekerDashboard = () => {
                                     <div className="flex flex-col items-end">
                                         <span className="text-gray-500 text-sm font-bold tracking-wide uppercase mb-1">Interviews</span>
                                         <h3 className="text-4xl font-heading font-extrabold text-gray-900">{stats.interviewCount}</h3>
+                                        <span className="text-xs text-purple-500 font-semibold mt-1">View all →</span>
                                     </div>
                                 </div>
-                            </motion.div>
+                            </Link>
                         </>
                     )}
                 </div>

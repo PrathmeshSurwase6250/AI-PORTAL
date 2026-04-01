@@ -20,6 +20,7 @@ import Footer from './components/Common/Footer'
 // Application Management Pages
 import MyApplications from './pages/applications/MyApplications'
 import MyResumesPage from './pages/jobseeker/MyResumesPage'
+import MyInterviewsPage from './pages/jobseeker/MyInterviewsPage'
 import JobApplicants from './pages/applications/JobApplicants'
 
 import JobseekerDashboard from './pages/jobseeker/Dashboard'
@@ -99,6 +100,7 @@ const App = () => {
         {/* Application Management Routes */}
         <Route path="/my-applications" element={<MyApplications />} />
         <Route path="/my-resumes" element={<MyResumesPage />} />
+        <Route path="/my-interviews" element={<MyInterviewsPage />} />
         <Route path="/job-applications/:job_id" element={<JobApplicants />} />
       </Route>
 

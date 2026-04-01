@@ -2,31 +2,15 @@ import mongoose from "mongoose";
 
 
 const questionSchema = new mongoose.Schema({
-  question: {
-    type: String,
-  },
-  difficulty: {
-    type: String,
-  },
-  timelimit: {
-    type: Number,
-  },
-  score: {
-    type: Number,
-    default: 0
-  },
-  confidence: {
-    type: Number,
-    default: 0
-  },
-  communication: {
-    type: Number,
-    default: 0
-  },
-  correctness: {
-    type: Number,
-    default: 0
-  }
+  question:      { type: String },
+  difficulty:    { type: String },
+  timelimit:     { type: Number },
+  answer:        { type: String, default: '' },
+  feedback:      { type: String, default: '' },
+  score:         { type: Number, default: 0 },
+  confidence:    { type: Number, default: 0 },
+  communication: { type: Number, default: 0 },
+  correctness:   { type: Number, default: 0 },
 });
 
 const interviewSchema = new mongoose.Schema({
@@ -44,7 +28,7 @@ const interviewSchema = new mongoose.Schema({
 
   mode: {
     type: String,
-    enum: ["HR", "Technical"],
+    enum: ["HR", "Technical", "technical", "behavioral", "system design"],
     required: true
   },
 
@@ -65,7 +49,7 @@ const interviewSchema = new mongoose.Schema({
 
   status: {
     type: String,
-    enum: ["Completed", "Incomplete"],
+    enum: ["Completed", "Incomplete", "completed", "incomplete"],
     default: "Incomplete"
   }
 

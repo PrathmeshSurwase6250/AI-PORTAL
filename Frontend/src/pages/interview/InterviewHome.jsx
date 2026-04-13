@@ -79,31 +79,31 @@ const SetupScreen = ({ onStart }) => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900 flex items-center justify-center px-4">
+        <div className="min-h-screen bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center px-4">
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-lg">
 
                 {/* Header */}
                 <div className="text-center mb-10">
-                    <div className="w-20 h-20 bg-indigo-600/20 border border-indigo-500/30 rounded-3xl flex items-center justify-center mx-auto mb-5 backdrop-blur-sm">
+                    <div className="w-20 h-20 bg-mist-900 border border-indigo-500/30 rounded-3xl flex items-center justify-center mx-auto mb-5 backdrop-blur-sm">
                         <IoSparklesOutline className="text-4xl text-indigo-400" />
                     </div>
                     <h1 className="text-4xl font-heading font-extrabold text-white tracking-tight mb-2">AI Voice Interview</h1>
                     <p className="text-gray-400">Upload your resume — AI reads your profile, generates 5 questions, speaks them to you, and scores your voice answers in real time.</p>
                 </div>
 
-                <div className="bg-white/5 backdrop-blur-md border border-white/10 rounded-3xl p-8 space-y-6">
+                <div className="bg-white/90 backdrop-blur-md border border-white rounded-3xl p-8 space-y-6">
 
                     {/* Resume Upload */}
                     <div>
-                        <label className="block text-sm font-bold text-gray-300 mb-3">Resume PDF</label>
+                        <label className="block text-sm font-bold text-gray-800 mb-3">Resume PDF</label>
                         <div
                             onClick={() => fileRef.current.click()}
                             className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition ${
-                                file ? 'border-indigo-500 bg-indigo-500/10' : 'border-gray-600 hover:border-indigo-500 hover:bg-white/5'
+                                file ? 'border-indigo-500 bg-indigo-500/10' : 'border-gray-800 hover:border-indigo-500 hover:bg-white/5'
                             }`}
                         >
-                            <IoCloudUploadOutline className={`text-4xl mx-auto mb-2 ${file ? 'text-indigo-400' : 'text-gray-500'}`} />
-                            <p className={`font-bold text-sm ${file ? 'text-indigo-300' : 'text-gray-400'}`}>
+                            <IoCloudUploadOutline className={`text-4xl mx-auto mb-2 ${file ? 'text-indigo-400' : 'text-gray-900'}`} />
+                            <p className={`font-bold text-sm ${file ? 'text-indigo-800' : 'text-gray-400'}`}>
                                 {file ? `✓ ${file.name}` : 'Click to upload your Resume PDF'}
                             </p>
                             <input ref={fileRef} type="file" accept=".pdf" className="hidden" onChange={e => setFile(e.target.files[0])} />
@@ -112,7 +112,7 @@ const SetupScreen = ({ onStart }) => {
 
                     {/* Interview Mode */}
                     <div>
-                        <label className="block text-sm font-bold text-gray-300 mb-3">Interview Mode</label>
+                        <label className="block text-sm font-bold text-gray-800 mb-3">Interview Mode</label>
                         <div className="grid grid-cols-3 gap-3">
                             {[
                                 { id: 'technical',    label: 'Technical',    icon: '⚙️' },
@@ -132,14 +132,14 @@ const SetupScreen = ({ onStart }) => {
 
                     {/* Mic permission note */}
                     <div className="flex items-start gap-3 bg-amber-500/10 border border-amber-500/30 rounded-xl px-4 py-3">
-                        <IoMicOutline className="text-amber-400 text-xl shrink-0 mt-0.5" />
-                        <p className="text-xs text-amber-300">Allow microphone access when prompted. Your browser will recognize your voice — no audio is sent to any server.</p>
+                        <IoMicOutline className="text-amber-900 text-xl shrink-0 mt-0.5" />
+                        <p className="text-xs text-amber-900">Allow microphone access when prompted. Your browser will recognize your voice — no audio is sent to any server.</p>
                     </div>
 
                     {error && <p className="text-red-400 text-sm bg-red-500/10 border border-red-500/20 rounded-xl px-4 py-2">{error}</p>}
 
                     <button onClick={handleStart} disabled={loading || !file}
-                        className="w-full py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-extrabold text-lg rounded-2xl hover:opacity-90 disabled:opacity-50 transition flex items-center justify-center gap-3 shadow-lg shadow-indigo-900/50">
+                        className="w-full py-4 bg-gradient-to-r from-indigo-100 to-purple-600 text-black font-extrabold text-lg rounded-2xl hover:opacity-90 disabled:opacity-80 transition flex items-center justify-center gap-3 shadow-lg shadow-indigo-900/50">
                         {loading
                             ? <><div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" /> Analyzing Resume…</>
                             : <><IoPlayOutline className="text-xl" /> Start Voice Interview</>}

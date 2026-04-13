@@ -18,14 +18,13 @@ const About = () => {
                         <BsRobot />
                     </motion.div>
                     <h1 className="text-4xl md:text-5xl lg:text-6xl font-heading font-extrabold text-gray-900 tracking-tight mb-4">
-                        Revolutionizing <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-600">Hiring</span> with AI
+                        AI Job Portal is an <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-600">intelligent recruitment platform</span> designed to streamline the hiring process using artificial intelligence.
                     </h1>
                     <p className="text-gray-500 mt-4 text-xl max-w-3xl mx-auto leading-relaxed">
-                        We built the AI Portal to bridge the gap between incredible talent and forward-thinking companies. By leveraging cutting-edge Artificial Intelligence, we eliminate bias and accelerate the connection process.
+                       It enables resume building, automated resume analysis, and AI-driven interview practice to enhance candidate preparation. The system efficiently matches candidates with suitable job opportunities while reducing bias and improving hiring accuracy.
                     </p>
                 </div>
 
-                {/* Values Section */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-24">
                     
                     <motion.div 
@@ -70,23 +69,17 @@ const About = () => {
                 </div>
 
                 {/* Tech Stack Banner */}
-                <div className="bg-slate-900 rounded-3xl p-12 text-center text-white relative overflow-hidden">
+                <div className="bg-slate-600 rounded-3xl p-12 text-center text-white relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                     <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-500 rounded-full blur-[100px] opacity-20 pointer-events-none"></div>
                     
                     <IoCodeSlashOutline className="text-5xl text-gray-400 mx-auto mb-4" />
-                    <h2 className="text-3xl font-heading font-extrabold mb-4">Built for the Modern Web</h2>
+                    <h2 className="text-3xl font-heading font-extrabold mb-4">Next-Gen Recruitment System</h2>
                     <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
-                        Our platform is engineered using a robust MERN stack architecture integrated seamlessly with Large Language Models and framer-motion UI mechanics.
+                       AI Job Portal is an innovative platform designed to transform the recruitment process using advanced artificial intelligence. Our goal is to connect talented individuals with the right opportunities in a faster, smarter, and more efficient way.
                     </p>
                     
-                    <div className="flex flex-wrap justify-center gap-4">
-                        <span className="px-4 py-2 bg-slate-800 rounded-full text-sm font-bold border border-slate-700">MongoDB</span>
-                        <span className="px-4 py-2 bg-slate-800 rounded-full text-sm font-bold border border-slate-700">Express.js</span>
-                        <span className="px-4 py-2 bg-slate-800 rounded-full text-sm font-bold border border-slate-700">React + Vite</span>
-                        <span className="px-4 py-2 bg-slate-800 rounded-full text-sm font-bold border border-slate-700">Node</span>
-                        <span className="px-4 py-2 bg-slate-800 rounded-full text-sm font-bold border border-slate-700">Tailwind CSS 4</span>
-                    </div>
+                   
                 </div>
 
             </div>

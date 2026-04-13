@@ -48,7 +48,7 @@ const Home = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
           className="text-5xl md:text-7xl font-heading font-extrabold text-gray-900 tracking-tight leading-tight mb-6 max-w-4xl"
         >
-          Accelerate your career with <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-500">AI Intelligence</span>
+          Accelerate your career with <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-600 to-indigo-500">AI PORTAL</span>
         </motion.h1>
 
         <motion.p 
@@ -140,7 +140,8 @@ const Home = () => {
             <FeatureCard 
               icon={<IoCodeWorking size={28} />}
               title="AI Code Review"
-              description="For technical roles, get your code snippets and projects analyzed instantly to prepare for technical rounds."
+              description="An AI Code Reviewer is a tool that automatically checks your code for errors and improvements using AI.
+It helps make your code cleaner, faster, and more efficient."
               delay={0.4}
             />
           </div>

@@ -100,7 +100,7 @@ const CodeReviewerPage = () => {
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Hero */}
-            <div className="bg-gradient-to-br from-gray-900 via-indigo-950 to-gray-900 text-white px-6 py-12 text-center">
+            <div className="bg-gradient-to-br from-gray-900 via-indigo-500 to-gray-900 text-white px-6 py-12 text-center">
                 <div className="flex items-center justify-center gap-3 mb-4">
                     <div className="w-12 h-12 rounded-2xl bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center">
                         <IoCodeSlashOutline className="text-2xl text-indigo-300" />

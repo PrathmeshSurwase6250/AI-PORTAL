@@ -80,7 +80,10 @@ const App = () => {
       );
       dispatch(setUserData(res.data));
     } catch (error) {
-      console.log(error);
+      console.log("Error fetching user session:", error);
+      // If token is invalid or expired, remove it so guards correctly redirect to /auth
+      localStorage.removeItem("token");
+      dispatch(setUserData(null));
     }
   };
 

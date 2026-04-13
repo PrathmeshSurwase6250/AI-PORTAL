@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { useNavigate } from 'react-router-dom';
-import JobList from '../components/Jobs/JobList';
+import JobList from '../../components/jobs/JobList';
 
 const Jobs = () => {
   const navigate = useNavigate();

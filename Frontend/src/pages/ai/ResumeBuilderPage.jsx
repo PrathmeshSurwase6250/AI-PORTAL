@@ -7,12 +7,12 @@ import {
     IoCheckmarkCircleOutline, IoWarningOutline, IoArrowUpOutline,
 } from 'react-icons/io5';
 
-import TemplateModern   from '../../components/ResumeTemplates/TemplateModern';
-import TemplateCreative from '../../components/ResumeTemplates/TemplateCreative';
-import TemplateATS      from '../../components/ResumeTemplates/TemplateATS';
+import TemplateModern   from '../../components/resume/TemplateModern';
+import TemplateCreative from '../../components/resume/TemplateCreative';
+import TemplateATS      from '../../components/resume/TemplateATS';
 
 import { createResume } from '../../services/resumeApi';
-import { ServerURL }    from '../../config/server';
+import { ServerURL }    from '../../App';
 
 // ── Shared helpers ─────────────────────────────────────────────────────────────
 const getHeaders = () => ({
@@ -304,8 +304,32 @@ const ResumeBuilderPage = () => {
         window.location.reload();
     };
     const handleSave = async () => {
-        try { setIsSaving(true); await createResume(formData); alert('Saved!'); }
-        catch (e) { alert('Failed to save.'); }
+        const personal = formData.personal_Information;
+        if (!personal.full_Name) {
+            alert('Please enter your Full Name in Personal Details.');
+            setActiveTab('personal');
+            return;
+        }
+        if (!personal.phone_number) {
+            alert('Please enter your Phone Number in Personal Details.');
+            setActiveTab('personal');
+            return;
+        }
+        if (!formData.career_Objective) {
+            alert('Please enter a Professional Summary / Career Objective.');
+            setActiveTab('objective');
+            return;
+        }
+
+        try { 
+            setIsSaving(true); 
+            const res = await createResume(formData); 
+            alert('Successfully resume created!'); 
+        }
+        catch (e) { 
+            const msg = e.response?.data?.details?.join(', ') || e.response?.data?.message || 'Failed to save.';
+            alert('Save failed: ' + msg); 
+        }
         finally { setIsSaving(false); }
     };
 

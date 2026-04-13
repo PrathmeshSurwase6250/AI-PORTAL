@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getJobById } from '../services/jobApi';
-import { checkApplication, withdrawApplication } from '../services/applicationApi';
+import { getJobById } from '../../services/jobApi';
+import { checkApplication, withdrawApplication } from '../../services/applicationApi';
 import { motion, AnimatePresence } from 'motion/react';
 import { IoArrowBackOutline, IoBriefcaseOutline, IoLocationOutline, IoCashOutline, IoBusinessOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
-import ApplyJobModal from '../components/applications/ApplyJobModal';
+import ApplyJobModal from '../../components/applications/ApplyJobModal';
+import { ServerURL } from '../../App';
 
 const JobDetails = () => {
     const { id } = useParams();
@@ -16,6 +17,11 @@ const JobDetails = () => {
     const [isApplyModalOpen, setIsApplyModalOpen] = useState(false);
     const [hasApplied, setHasApplied] = useState(false);
     const [applyLoading, setApplyLoading] = useState(false);
+
+    const logoUrl = job?.company_logo?.url;
+    const displayLogo = logoUrl 
+        ? (logoUrl.startsWith('http') ? logoUrl : `${ServerURL}${logoUrl}`)
+        : "https://img.freepik.com/premium-vector/creative-elegant-minimalistic-logo-design-vector-any-brand-business-company_1253202-134378.jpg";
 
     useEffect(() => {
         const fetchJob = async () => {
@@ -106,7 +112,7 @@ const JobDetails = () => {
                         <div className="flex items-center gap-5">
                             <div className="w-20 h-20 bg-white rounded-2xl shadow-sm border border-gray-100 p-2 shrink-0 flex items-center justify-center">
                                 <img 
-                                    src={job.company_logo?.url || "https://img.freepik.com/premium-vector/creative-elegant-minimalistic-logo-design-vector-any-brand-business-company_1253202-134378.jpg"} 
+                                    src={displayLogo} 
                                     alt={job.company_name} 
                                     className="w-full h-full object-contain"
                                 />

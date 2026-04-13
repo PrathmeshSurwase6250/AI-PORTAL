@@ -4,12 +4,12 @@ import { IoSparklesSharp, IoMailOutline, IoLockClosedOutline, IoPersonOutline } 
 import { motion, AnimatePresence } from "motion/react";
 import { FcGoogle } from "react-icons/fc";
 import { signInWithPopup } from 'firebase/auth';
-import { auth, provider } from '../utils/firebase';
+import { auth, provider } from '../../utils/firebase';
 import axios from 'axios';
-import { ServerURL } from '../App';
+import { ServerURL } from '../../App';
 import { useDispatch } from 'react-redux';
-import { setUserData } from '../redux/userSlice';
-import { useNavigate } from 'react-router-dom';
+import { setUserData } from '../../redux/userSlice';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Auth = () => {
   const dispatch = useDispatch();
@@ -221,6 +221,14 @@ const Auth = () => {
             <IoLockClosedOutline className="absolute top-1/2 -translate-y-1/2 left-4 text-gray-400" />
             <input type="password" name="password" value={formData.password} onChange={handleInputChange} required placeholder="Password" className="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all outline-none text-gray-800" />
           </div>
+
+          {isLogin && (
+            <div className="flex justify-end mt-1">
+              <Link to="/forgot-password" size="sm" className="text-xs font-bold text-brand-600 hover:text-brand-700 transition">
+                Forgot password?
+              </Link>
+            </div>
+          )}
 
           <button type="submit" disabled={loading} className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3.5 rounded-xl transition-all shadow-md shadow-brand-500/20 disabled:opacity-70 mt-4 flex items-center justify-center">
             {loading ? <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div> : (isLogin ? "Sign In" : "Create Account")}

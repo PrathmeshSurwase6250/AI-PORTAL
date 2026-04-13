@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import axios from 'axios';
-import { ServerURL } from '../config/server';
+import { ServerURL } from '../../App';
 import {
     IoMicOutline, IoMicOffOutline, IoDocumentTextOutline,
     IoPlayOutline, IoStopOutline, IoCheckmarkCircleOutline,

@@ -12,7 +12,15 @@ const PostJob = () => {
         try {
             setLoading(true);
             setSuccessMsg('');
-            await createJobPost(jobData);
+            
+            const formData = new FormData();
+            Object.keys(jobData).forEach(key => {
+                if (jobData[key] !== null) {
+                    formData.append(key, jobData[key]);
+                }
+            });
+
+            await createJobPost(formData);
             setSuccessMsg('Job successfully posted! Redirecting to Dashboard...');
             setTimeout(() => {
                 navigate('/recruiter');

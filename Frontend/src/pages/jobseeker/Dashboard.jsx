@@ -4,6 +4,7 @@ import { getDashboardStats, getMyResumes, getInterviewPerformances } from '../..
 import { IoDocumentTextOutline, IoBriefcaseOutline, IoVideocamOutline, IoStarOutline, IoTrendingUpOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import SuggestedJobs from '../../components/home/SuggestedJobs';
 
 const JobseekerDashboard = () => {
     const userData = useSelector(state => state.user?.userData);
@@ -141,6 +142,9 @@ const JobseekerDashboard = () => {
                         </>
                     )}
                 </div>
+
+                {/* Suggested Jobs Section - AI Powered */}
+                {!loading && <SuggestedJobs />}
 
                 {/* Split Bottom Area */}
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">

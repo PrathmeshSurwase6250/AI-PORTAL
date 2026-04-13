@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IoBriefcaseOutline, IoPeopleOutline, IoTrendingUpOutline, IoAddCircleOutline } from 'react-icons/io5';
-import { getAllJobs } from '../../services/jobApi';
+import { getRecruiterStats } from '../../services/recruiterApi';
 
 const Dashboard = () => {
     const [stats, setStats] = useState({ activeJobs: 0, totalApplicants: 0 });
@@ -9,11 +9,11 @@ const Dashboard = () => {
     useEffect(() => {
         const loadStats = async () => {
             try {
-                // Simulating stat aggregation for now. 
-                // In exact production, creating a specific GET /api/recruiter/stats endpoint would be faster.
-                const jobData = await getAllJobs();
-                const totalJobs = Array.isArray(jobData.allJobPosting) ? jobData.allJobPosting.length : 0;
-                setStats({ activeJobs: totalJobs, totalApplicants: totalJobs * 12 }); // Stub applicant math
+                const data = await getRecruiterStats();
+                setStats({ 
+                    activeJobs: data.totalJobs || 0, 
+                    totalApplicants: data.totalApplication || 0 
+                });
             } catch (err) {
                 console.error(err);
             } finally {

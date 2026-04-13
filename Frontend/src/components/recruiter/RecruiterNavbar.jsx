@@ -2,17 +2,24 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { IoNotificationsOutline, IoSearchOutline, IoMenuOutline } from 'react-icons/io5';
 import { FaUserTie } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { ServerURL } from '../../config/server';
+import { ServerURL } from '../../App'; // Fixed import path
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserData } from '../../redux/userSlice';
+import { useEffect } from 'react';
 
 const RecruiterNavbar = ({ toggleSidebar }) => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
     const userData = useSelector((state) => state.user?.userData);
+
+    // Close menu when navigating
+    useEffect(() => {
+        setShowProfileMenu(false);
+    }, [location.pathname]);
 
     const handleLogout = async () => {
         try {
@@ -79,7 +86,12 @@ const RecruiterNavbar = ({ toggleSidebar }) => {
                                     </div>
                                 </div>
                                 <div className="px-2">
-                                    <button className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600 rounded-xl transition-colors">Company Settings</button>
+                                    <button 
+                                        onClick={() => navigate("/settings")}
+                                        className="w-full text-left px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-indigo-600 rounded-xl transition-colors"
+                                    >
+                                        Company Settings
+                                    </button>
                                     <div className="h-px bg-gray-100 my-1 mx-2"></div>
                                     <button 
                                         onClick={handleLogout}

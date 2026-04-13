@@ -2,6 +2,7 @@ import User from "../models/auth_Model.js";
 import jobModel from "../models/job_Listing_Model.js";
 import ApplicationModel from "../models/application_Model.js";
 import feedbackModel from "../models/feedback_Model.js";
+import ResetRequest from "../models/resetRequest_Model.js";
 
 export const adminDashboard = async (req, res) => {
     try {
@@ -84,6 +85,37 @@ export const getAllFeedbacks = async (req, res) => {
     try {
         const feedbacks = await feedbackModel.find({}).populate("user");
         res.status(200).json({ feedbacks });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
+// ── RESET REQUEST MANAGEMENT ──
+
+export const getResetRequests = async (req, res) => {
+    try {
+        const requests = await ResetRequest.find({ status: "pending" }).sort({ createdAt: -1 });
+        res.status(200).json({ requests });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
+export const approveResetRequest = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const request = await ResetRequest.findByIdAndUpdate(id, { status: "approved" }, { new: true });
+        res.status(200).json({ message: "Request approved! User can now reset their password.", request });
+    } catch (err) {
+        res.status(500).json({ message: "Server Error" });
+    }
+};
+
+export const rejectResetRequest = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const request = await ResetRequest.findByIdAndUpdate(id, { status: "rejected" }, { new: true });
+        res.status(200).json({ message: "Request rejected.", request });
     } catch (err) {
         res.status(500).json({ message: "Server Error" });
     }

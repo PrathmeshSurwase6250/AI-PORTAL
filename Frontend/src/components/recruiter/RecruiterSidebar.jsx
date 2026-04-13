@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { IoBriefcaseOutline, IoPeopleOutline, IoStatsChartOutline, IoBusinessOutline, IoAddCircleOutline } from 'react-icons/io5';
+import { IoBriefcaseOutline, IoPeopleOutline, IoStatsChartOutline, IoAddCircleOutline } from 'react-icons/io5';
 
 const RecruiterSidebar = () => {
     return (
-        <aside className="w-64 bg-white border-r border-gray-100 flex flex-col h-screen fixed">
+        <aside className="w-64 bg-white border-r border-gray-100 flex flex-col h-full">
             <div className="p-6 border-b border-gray-50 flex items-center justify-center">
                 <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold">R</div>
@@ -40,13 +40,6 @@ const RecruiterSidebar = () => {
                     <IoPeopleOutline className="text-lg" /> Applicants
                 </NavLink>
                 
-                <p className="px-4 text-xs font-bold text-gray-400 uppercase tracking-wider mt-8 mb-2">Settings</p>
-                <NavLink 
-                    to="/recruiter/company-profile" 
-                    className={({isActive}) => `flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${isActive ? 'bg-indigo-50 text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'}`}
-                >
-                    <IoBusinessOutline className="text-lg" /> Company Profile
-                </NavLink>
             </nav>
         </aside>
     );

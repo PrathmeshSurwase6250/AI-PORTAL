@@ -19,3 +19,5 @@ router.get("/jobs" , auth , role("recruiter") , recruiterJobs) ;
 router.patch("/application/:application_id" , auth , role("recruiter") , updateApplicantStatus) ;
 
 router.get("/applicants/:job_id" ,auth , role("recruiter") , recruiterApplicants );
+
+export default router;

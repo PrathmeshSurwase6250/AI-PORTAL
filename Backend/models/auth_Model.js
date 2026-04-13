@@ -19,7 +19,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["recruiter", "admin", "jobseeker"],
         default: "jobseeker"
-    }
+    },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date
 }, { timestamps: true });
 
 export default mongoose.model("User", userSchema);

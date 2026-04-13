@@ -104,8 +104,16 @@ const JobTable = () => {
                         <div className="p-5 flex flex-col md:flex-row md:items-center gap-4 justify-between">
                             {/* Left: job info */}
                             <div className="flex items-start gap-4">
-                                <div className="w-11 h-11 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 text-xl shrink-0">
-                                    <IoBriefcaseOutline />
+                                <div className="w-11 h-11 rounded-xl bg-white border border-gray-100 overflow-hidden flex items-center justify-center text-indigo-600 text-xl shrink-0">
+                                    {job.company_logo?.url ? (
+                                        <img 
+                                            src={job.company_logo.url.startsWith('http') ? job.company_logo.url : `${ServerURL}${job.company_logo.url}`} 
+                                            alt={job.company_name} 
+                                            className="w-full h-full object-contain"
+                                        />
+                                    ) : (
+                                        <IoBriefcaseOutline />
+                                    )}
                                 </div>
                                 <div>
                                     <h3 className="font-bold text-gray-900 text-base">{job.job_title}</h3>

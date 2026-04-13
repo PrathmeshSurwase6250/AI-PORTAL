@@ -1,7 +1,7 @@
 import Application from "../models/application_Model.js"
 import JobModel from "../models/job_Listing_Model.js"
 
-const recruiterDashboard = async (req , res)=>{
+export const recruiterDashboard = async (req , res)=>{
     try{
 
     const user_id = req.user_id ;
@@ -28,7 +28,7 @@ const recruiterDashboard = async (req , res)=>{
 }
 
 
-const recruiterJobs = async (req , res)=>{
+export const recruiterJobs = async (req , res)=>{
     try{
 
         const user_id = req.user_id ;
@@ -47,7 +47,7 @@ const recruiterJobs = async (req , res)=>{
 }
 
 
-const recruiterApplicants  = async(req , res)=>{
+export const recruiterApplicants  = async(req , res)=>{
     try{
         const {job_id} = req.params ;
 
@@ -77,7 +77,7 @@ const recruiterApplicants  = async(req , res)=>{
 }
 
 
-const  updateApplicantStatus = async(req , res)=>{
+export const  updateApplicantStatus = async(req , res)=>{
     try {
 
         const {application_id} = req.params ;
@@ -103,11 +103,4 @@ const  updateApplicantStatus = async(req , res)=>{
             message: "Server Error"
     });
 }
-}
-
-export default {
-    recruiterApplicants ,
-    recruiterDashboard ,
-    recruiterJobs ,
-    updateApplicantStatus
 }

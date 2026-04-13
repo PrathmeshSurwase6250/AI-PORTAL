@@ -6,16 +6,33 @@ const createJobPost = async (req, res) => {
     try {
         const user_id = req.user_id;
 
-        if (Object.keys(req.body).length === 0) {
-            return res.status(400).json({
-                message: "Enter The Details!"
-            });
+        // Handle File Upload for Company Logo
+        let logoData = {};
+        if (req.file) {
+            logoData = {
+                filename: req.file.filename,
+                url: `/public/logos/${req.file.filename}`
+            };
         }
 
-        const createPost = await jobModel.create({
-            user: user_id,
-            ...req.body
+        // Parse any fields that might come as JSON strings from FormData
+        const bodyData = { ...req.body };
+        ['required_skills', 'company_information', 'educational_qualification'].forEach(field => {
+            if (typeof bodyData[field] === 'string' && bodyData[field].startsWith('[')) {
+                try { bodyData[field] = JSON.parse(bodyData[field]); } catch (e) {}
+            }
         });
+
+        const jobData = {
+            user: user_id,
+            ...bodyData
+        };
+
+        if (req.file) {
+            jobData.company_logo = logoData;
+        }
+
+        const createPost = await jobModel.create(jobData);
 
         res.status(201).json({
             message: "Successfully Created!",
@@ -43,9 +60,25 @@ const updatedJobPost = async (req, res) => {
             });
         }
 
+        // Handle File Upload if present
+        const bodyData = { ...req.body };
+        if (req.file) {
+            bodyData.company_logo = {
+                filename: req.file.filename,
+                url: `/public/logos/${req.file.filename}`
+            };
+        }
+
+        // Parse list fields if they come as JSON strings
+        ['required_skills', 'company_information', 'educational_qualification'].forEach(field => {
+            if (typeof bodyData[field] === 'string' && bodyData[field].startsWith('[')) {
+                try { bodyData[field] = JSON.parse(bodyData[field]); } catch (e) {}
+            }
+        });
+
         const updatedPost = await jobModel.findOneAndUpdate(
             { _id: post_id, user: user_id },
-            req.body,
+            bodyData,
             { new: true, runValidators: true }
         );
 

@@ -1,10 +1,29 @@
-import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
-import AdminSidebar from '../../components/admin/AdminSidebar';
-import AdminNavbar from '../../components/admin/AdminNavbar';
+import React, { useState, useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import AdminSidebar from '../components/admin/AdminSidebar';
+import AdminNavbar from '../components/admin/AdminNavbar';
+import { useSelector } from 'react-redux';
 
 const AdminLayout = () => {
+  const authState = useSelector((state) => state.auth);
+  const userData = authState?.userData;
+  const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+
+  // Security Guard: Only allow admin to access this layout
+  useEffect(() => {
+    if (userData && userData.role !== 'admin') {
+      navigate('/dashboard'); // Unauthorized users back to dashboard
+    } else if (!userData && !localStorage.getItem("token")) {
+      navigate('/auth'); // Redirect guests to login
+    }
+  }, [userData, navigate]);
+
+  // Close mobile sidebar on route change
+  useEffect(() => {
+    setIsSidebarOpen(false);
+  }, [location.pathname]);
 
   return (
     <div className="flex bg-gray-50 min-h-screen">

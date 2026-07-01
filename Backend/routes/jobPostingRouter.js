@@ -1,18 +1,21 @@
 import jobPostingController from "../controllers/jobPosting_controlller.js";
 import { getMyJobs } from "../controllers/jobPosting_controlller.js";
+import suggestedJobsController from "../controllers/jobSuggestion_Controller.js";
 const { createJobPost, updatedJobPost, deletedJobPost, showAllPost, getJobById } = jobPostingController;
 
 import express from "express";
 import authMiddleware from "../middelwares/auth.js";
 import role from "../middelwares/roleMiddleware.js";
+import upload from "../config/multer.js";
 
 const router = express.Router();
 
-router.post("/create-job-post",            authMiddleware, role("recruiter"), createJobPost);
-router.put("/update-job-post/:post_id",    authMiddleware, role("recruiter"), updatedJobPost);
+router.post("/create-job-post",            authMiddleware, role("recruiter"), upload.single('company_logo'), createJobPost);
+router.put("/update-job-post/:post_id",    authMiddleware, role("recruiter"), upload.single('company_logo'), updatedJobPost);
 router.delete("/delete-job-post/:post_id", authMiddleware, role("recruiter"), deletedJobPost);
 // Recruiter sees only their own jobs
 router.get("/my-jobs",                     authMiddleware, role("recruiter"), getMyJobs);
+router.get("/suggested",                   authMiddleware, suggestedJobsController.getSuggestedJobs);
 router.get("/show-all-posts",              showAllPost);
 router.get("/:id",                         getJobById);
 

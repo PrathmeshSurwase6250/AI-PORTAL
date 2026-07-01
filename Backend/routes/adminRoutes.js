@@ -6,7 +6,10 @@ import {
     deleteUser ,
     allJobs ,
     userRoles  ,
-    adminDashboard
+    adminDashboard,
+    getResetRequests,
+    approveResetRequest,
+    rejectResetRequest
 } from "../controllers/admin_Controller.js"
 import auth from "../middelwares/auth.js"
 import role from "../middelwares/roleMiddleware.js"
@@ -29,5 +32,10 @@ router.patch("/user-role/:user_id" ,auth , role ("admin")  , userRoles )
 router.delete("/job/:job_id" ,auth , role ("admin")  ,deleteJob )
 
 router.delete("/user/:user_id" ,auth , role ("admin")  ,deleteUser )
+
+// Reset Request Management
+router.get("/reset-requests", auth, role("admin"), getResetRequests);
+router.patch("/approve-reset/:id", auth, role("admin"), approveResetRequest);
+router.patch("/reject-reset/:id", auth, role("admin"), rejectResetRequest);
 
 export default router;

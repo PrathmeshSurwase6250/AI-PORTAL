@@ -8,7 +8,6 @@ const authorizeRoles = (...roles) => {
             }
 
             const userRole = req.user.role;
-            console.log(`[AUTH DEBUG] User: ${req.user.email}, Role: ${userRole}, Required: ${roles.join(',')}`);
             if (!userRole || !roles.includes(userRole)) {
                 return res.status(403).json({
                     message: `Access denied. Required role: ${roles.join(' or ')}. Your role is ${userRole || 'unknown'}.`

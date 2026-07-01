@@ -12,7 +12,15 @@ const EditJobModal = ({ job, isOpen, onClose, onRefresh }) => {
         try {
             setLoading(true);
             setSuccessMsg('');
-            await updateJobPost(job._id, jobData);
+
+            const formData = new FormData();
+            Object.keys(jobData).forEach(key => {
+                if (jobData[key] !== null) {
+                    formData.append(key, jobData[key]);
+                }
+            });
+
+            await updateJobPost(job._id, formData);
             setSuccessMsg('Job successfully updated!');
             
             setTimeout(() => {

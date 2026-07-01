@@ -1,13 +1,12 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import { 
   IoGridOutline, 
   IoPeopleOutline, 
   IoBriefcaseOutline, 
   IoDocumentTextOutline, 
   IoChatbubbleEllipsesOutline,
-  IoSettingsOutline,
-  IoLogOutOutline 
+  IoLogOutOutline,
+  IoLockClosedOutline
 } from 'react-icons/io5';
 import { BsRobot } from 'react-icons/bs';
 import { useNavigate } from 'react-router-dom';
@@ -17,6 +16,7 @@ import { setUserData } from '../../redux/userSlice';
 const AdminSidebar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -29,6 +29,7 @@ const AdminSidebar = () => {
     { name: 'Users', path: '/admin/users', icon: <IoPeopleOutline /> },
     { name: 'Jobs', path: '/admin/jobs', icon: <IoBriefcaseOutline /> },
     { name: 'Applications', path: '/admin/applications', icon: <IoDocumentTextOutline /> },
+    { name: 'Reset Requests', path: '/admin/reset-requests', icon: <IoLockClosedOutline />, badge: true },
     { name: 'Feedback', path: '/admin/feedback', icon: <IoChatbubbleEllipsesOutline /> },
   ];
 
@@ -76,13 +77,6 @@ const AdminSidebar = () => {
 
       {/* Bottom Section */}
       <div className="p-4 border-t border-gray-100">
-        <NavLink
-            to="/admin/settings"
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-all duration-200 group"
-          >
-            <IoSettingsOutline className="text-xl group-hover:rotate-45 transition-transform duration-300" />
-            <span className="tracking-wide text-sm">Settings</span>
-        </NavLink>
         <button
             onClick={handleLogout}
             className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl font-medium text-red-500 hover:bg-red-50 transition-all duration-200 group mt-1"

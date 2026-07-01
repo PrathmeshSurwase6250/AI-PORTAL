@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { IoBriefcaseOutline, IoLocationOutline, IoCashOutline, IoBusinessOutline, IoCheckmarkCircleOutline, IoGitBranchOutline, IoPeopleOutline } from 'react-icons/io5';
+import { IoBriefcaseOutline, IoLocationOutline, IoCashOutline, IoBusinessOutline, IoCheckmarkCircleOutline, IoGitBranchOutline, IoPeopleOutline, IoAddOutline } from 'react-icons/io5';
 
 const JobForm = ({ initialData = null, onSubmit, loading, successMsg }) => {
     const [formData, setFormData] = useState({
@@ -17,8 +17,10 @@ const JobForm = ({ initialData = null, onSubmit, loading, successMsg }) => {
         educational_qualification: '',
         role_about: '',
         role_responsibilities: '',
-        company_logo: ''
+        company_logo: null
     });
+
+    const [logoPreview, setLogoPreview] = useState('');
 
     useEffect(() => {
         if (initialData) {
@@ -37,43 +39,45 @@ const JobForm = ({ initialData = null, onSubmit, loading, successMsg }) => {
                 educational_qualification: Array.isArray(initialData.educational_qualification) ? initialData.educational_qualification.join(', ') : (initialData.educational_qualification || ''),
                 role_about: initialData.role_about || '',
                 role_responsibilities: initialData.role_responsibilities || '',
-                company_logo: initialData.company_logo?.url || ''
+                company_logo: null // We don't populate file input from URL
             });
+            if (initialData.company_logo?.url) {
+                setLogoPreview(initialData.company_logo.url);
+            }
         }
     }, [initialData]);
 
     const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
+        if (e.target.name === 'company_logo') {
+            const file = e.target.files[0];
+            if (file) {
+                setFormData({ ...formData, company_logo: file });
+                setLogoPreview(URL.createObjectURL(file));
+            }
+        } else {
+            setFormData({ ...formData, [e.target.name]: e.target.value });
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         
-        // Convert comma-separated string fields to arrays natively before passing payload to backend
+        // Prepare submission data
         const submissionData = { ...formData };
         
+        // Convert comma-separated string fields to arrays natively before passing payload to backend
         if (typeof submissionData.required_skills === 'string') {
-            submissionData.required_skills = submissionData.required_skills.split(',').map(s => s.trim()).filter(s => s);
+            submissionData.required_skills = JSON.stringify(submissionData.required_skills.split(',').map(s => s.trim()).filter(s => s));
         }
         if (typeof submissionData.company_information === 'string') {
-            submissionData.company_information = submissionData.company_information.split(',').map(s => s.trim()).filter(s => s);
+            submissionData.company_information = JSON.stringify(submissionData.company_information.split(',').map(s => s.trim()).filter(s => s));
         }
         if (typeof submissionData.educational_qualification === 'string') {
-            submissionData.educational_qualification = submissionData.educational_qualification.split(',').map(s => s.trim()).filter(s => s);
+            submissionData.educational_qualification = JSON.stringify(submissionData.educational_qualification.split(',').map(s => s.trim()).filter(s => s));
         }
         
         // Number Parsing
         submissionData.numberOfOpening = parseInt(submissionData.numberOfOpening, 10) || 1;
-        
-        // Map Logo URL
-        if (submissionData.company_logo && typeof submissionData.company_logo === 'string') {
-            submissionData.company_logo = {
-                filename: "custom_logo",
-                url: submissionData.company_logo
-            };
-        } else {
-            delete submissionData.company_logo; // Let Mongoose use the default Avatar
-        }
         
         onSubmit(submissionData);
     };
@@ -138,15 +142,33 @@ const JobForm = ({ initialData = null, onSubmit, loading, successMsg }) => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-bold text-gray-700 mb-2">Company Logo URL (Optional)</label>
-                    <input 
-                        type="url" 
-                        name="company_logo" 
-                        value={formData.company_logo} 
-                        onChange={handleChange} 
-                        placeholder="e.g. https://example.com/logo.png" 
-                        className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none transition-all"
-                    />
+                    <label className="block text-sm font-bold text-gray-700 mb-2">Company Logo</label>
+                    <div className="flex items-center gap-4">
+                        {logoPreview && (
+                            <div className="w-16 h-16 rounded-xl border border-gray-100 overflow-hidden shrink-0 bg-gray-50 flex items-center justify-center">
+                                <img 
+                                    src={logoPreview.startsWith('blob:') ? logoPreview : (logoPreview.startsWith('http') ? logoPreview : `http://localhost:3000${logoPreview}`)} 
+                                    className="w-full h-full object-contain" 
+                                    alt="Logo preview" 
+                                />
+                            </div>
+                        )}
+                        <label className="flex-1 cursor-pointer group">
+                            <div className="w-full px-4 py-3 bg-gray-50 border border-gray-200 border-dashed rounded-xl group-hover:border-indigo-500 transition-all flex items-center justify-center gap-2">
+                                <IoAddOutline className="text-gray-400 group-hover:text-indigo-500" />
+                                <span className="text-sm text-gray-500 group-hover:text-indigo-600 font-medium">
+                                    {formData.company_logo ? formData.company_logo.name : 'Upload Company Logo'}
+                                </span>
+                            </div>
+                            <input 
+                                type="file" 
+                                name="company_logo" 
+                                onChange={handleChange} 
+                                accept="image/*"
+                                className="hidden"
+                            />
+                        </label>
+                    </div>
                 </div>
 
                 <div>

@@ -12,15 +12,20 @@ import InterviewHome from './pages/InterviewHome'
 import Auth from './pages/Auth'
 import Contact from './pages/Home/Contact'
 import About from './pages/Home/About'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+import Settings from './pages/Settings'
 
 // Common Components
 import Navbar from './components/Common/Navbar'
 import Footer from './components/Common/Footer'
+import ProtectedRoute from './components/Common/ProtectedRoute'
 
 // Application Management Pages
 import MyApplications from './pages/applications/MyApplications'
 import MyResumesPage from './pages/jobseeker/MyResumesPage'
 import MyInterviewsPage from './pages/jobseeker/MyInterviewsPage'
+import AIJobMatches from './pages/jobseeker/AIJobMatches'
 import JobApplicants from './pages/applications/JobApplicants'
 
 import JobseekerDashboard from './pages/jobseeker/Dashboard'
@@ -32,6 +37,7 @@ import AdminLayout from './pages/layout/AdminLayout'
 import AdminDashboard from './pages/admin/Dashboard'
 import AdminUsers from './pages/admin/Users'
 import AdminJobs from './pages/admin/Jobs'
+import AdminResetRequests from './pages/admin/AdminResetRequests'
 import AdminApplications from './pages/admin/Applications'
 import AdminFeedback from './pages/admin/Feedback'
 
@@ -89,19 +95,24 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/jobs" element={<Jobs />} />
         <Route path="/jobs/:id" element={<JobDetails />} />
-        <Route path="/interview" element={<InterviewHome />} />
+        <Route path="/interview" element={<ProtectedRoute><InterviewHome /></ProtectedRoute>} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
-        <Route path="/dashboard" element={<JobseekerDashboard />} />
-        <Route path="/ai-resume" element={<ResumeBuilderPage />} />
-        <Route path="/code-reviewer" element={<CodeReviewerPage />} />
+        
+        <Route path="/dashboard" element={<ProtectedRoute><JobseekerDashboard /></ProtectedRoute>} />
+        <Route path="/ai-resume" element={<ProtectedRoute><ResumeBuilderPage /></ProtectedRoute>} />
+        <Route path="/ai-job-matching" element={<ProtectedRoute><AIJobMatches /></ProtectedRoute>} />
+        <Route path="/code-reviewer" element={<ProtectedRoute><CodeReviewerPage /></ProtectedRoute>} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
 
         {/* Application Management Routes */}
-        <Route path="/my-applications" element={<MyApplications />} />
-        <Route path="/my-resumes" element={<MyResumesPage />} />
-        <Route path="/my-interviews" element={<MyInterviewsPage />} />
-        <Route path="/job-applications/:job_id" element={<JobApplicants />} />
+        <Route path="/my-applications" element={<ProtectedRoute><MyApplications /></ProtectedRoute>} />
+        <Route path="/my-resumes" element={<ProtectedRoute><MyResumesPage /></ProtectedRoute>} />
+        <Route path="/my-interviews" element={<ProtectedRoute><MyInterviewsPage /></ProtectedRoute>} />
+        <Route path="/job-applications/:job_id" element={<ProtectedRoute><JobApplicants /></ProtectedRoute>} />
       </Route>
 
       {/* Admin Routes */}
@@ -111,6 +122,7 @@ const App = () => {
         <Route path="jobs" element={<AdminJobs />} />
         <Route path="applications" element={<AdminApplications />} />
         <Route path="feedback" element={<AdminFeedback />} />
+        <Route path="reset-requests" element={<AdminResetRequests />} />
       </Route>
 
       {/* Recruiter Routes */}

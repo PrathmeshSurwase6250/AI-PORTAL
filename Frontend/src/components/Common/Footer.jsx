@@ -2,8 +2,12 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { BsRobot } from 'react-icons/bs';
 import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 
 const Footer = () => {
+    const authState = useSelector((state) => state.auth);
+    const userData = authState?.userData;
+
   return (
     <footer className="bg-white border-t border-gray-100 pt-16 pb-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -27,24 +31,28 @@ const Footer = () => {
             </div>
           </div>
           
-          <div>
-            <h3 className="font-heading font-semibold text-gray-900 mb-4">For Jobseekers</h3>
-            <ul className="space-y-3">
-              <li><Link to="/jobs" className="text-gray-500 hover:text-brand-600 text-sm transition">Browse Jobs</Link></li>
-              <li><Link to="/resume" className="text-gray-500 hover:text-brand-600 text-sm transition">AI Resume Builder</Link></li>
-              <li><Link to="/interview" className="text-gray-500 hover:text-brand-600 text-sm transition">Mock Interviews</Link></li>
-              <li><Link to="/my-applications" className="text-gray-500 hover:text-brand-600 text-sm transition">Track Applications</Link></li>
-            </ul>
-          </div>
+          {(!userData || userData.role === 'jobseeker' || userData.role === 'admin') && (
+            <div>
+              <h3 className="font-heading font-semibold text-gray-900 mb-4">For Jobseekers</h3>
+              <ul className="space-y-3">
+                <li><Link to="/jobs" className="text-gray-500 hover:text-brand-600 text-sm transition">Browse Jobs</Link></li>
+                <li><Link to="/ai-resume" className="text-gray-500 hover:text-brand-600 text-sm transition">AI Resume Builder</Link></li>
+                <li><Link to="/interview" className="text-gray-500 hover:text-brand-600 text-sm transition">Mock Interviews</Link></li>
+                <li><Link to="/my-applications" className="text-gray-500 hover:text-brand-600 text-sm transition">Track Applications</Link></li>
+              </ul>
+            </div>
+          )}
 
-          <div>
-            <h3 className="font-heading font-semibold text-gray-900 mb-4">For Employers</h3>
-            <ul className="space-y-3">
-              <li><Link to="/recruiter/post-job" className="text-gray-500 hover:text-brand-600 text-sm transition">Post a Job</Link></li>
-              <li><Link to="/recruiter/dashboard" className="text-gray-500 hover:text-brand-600 text-sm transition">Recruiter Dashboard</Link></li>
-              <li><Link to="/pricing" className="text-gray-500 hover:text-brand-600 text-sm transition">Pricing</Link></li>
-            </ul>
-          </div>
+          {(!userData || userData.role === 'recruiter' || userData.role === 'admin') && (
+            <div>
+              <h3 className="font-heading font-semibold text-gray-900 mb-4">For Employers</h3>
+              <ul className="space-y-3">
+                <li><Link to="/recruiter/post-job" className="text-gray-500 hover:text-brand-600 text-sm transition">Post a Job</Link></li>
+                <li><Link to="/recruiter" className="text-gray-500 hover:text-brand-600 text-sm transition">Recruiter Dashboard</Link></li>
+                <li><Link to="/pricing" className="text-gray-500 hover:text-brand-600 text-sm transition">Pricing</Link></li>
+              </ul>
+            </div>
+          )}
 
           <div>
             <h3 className="font-heading font-semibold text-gray-900 mb-4">Company</h3>

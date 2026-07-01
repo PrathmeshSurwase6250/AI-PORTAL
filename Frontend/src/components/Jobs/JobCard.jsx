@@ -1,8 +1,14 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { IoLocationOutline, IoBriefcaseOutline, IoCashOutline, IoTimeOutline } from 'react-icons/io5';
+import { ServerURL } from '../../App';
 
 const JobCard = ({ job, onClick }) => {
+  const logoUrl = job?.company_logo?.url;
+  const displayLogo = logoUrl 
+    ? (logoUrl.startsWith('http') ? logoUrl : `${ServerURL}${logoUrl}`)
+    : "https://img.freepik.com/premium-vector/creative-elegant-minimalistic-logo-design-vector-any-brand-business-company_1253202-134378.jpg";
+
   return (
     <motion.div 
       whileHover={{ y: -4, scale: 1.01 }}
@@ -14,7 +20,7 @@ const JobCard = ({ job, onClick }) => {
         <div className="flex gap-4 items-center">
           <div className="w-14 h-14 bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100 p-2">
             <img 
-              src={job?.company_logo?.url || "https://img.freepik.com/premium-vector/creative-elegant-minimalistic-logo-design-vector-any-brand-business-company_1253202-134378.jpg"} 
+              src={displayLogo} 
               alt={job?.company_name} 
               className="w-full h-full object-contain"
             />

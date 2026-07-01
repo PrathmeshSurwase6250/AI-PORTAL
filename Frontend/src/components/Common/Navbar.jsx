@@ -3,17 +3,24 @@ import { motion, AnimatePresence } from "motion/react"
 import { useDispatch, useSelector } from 'react-redux';
 import { FaUserAstronaut, FaTimes } from "react-icons/fa";
 import { BsRobot } from "react-icons/bs";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ServerURL } from '../../App';
 import axios from 'axios';
 import { setUserData } from '../../redux/userSlice';
+import { useEffect } from 'react';
 
 const Navbar = () => {
     // Make sure we select from 'user' reducer assuming store.js uses { user: userReducer }
     const { userData } = useSelector((state) => state.user || state.auth);
     const [showMenu, setShowMenu] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
     const dispatch = useDispatch();
+
+    // Close menu on route change
+    useEffect(() => {
+        setShowMenu(false);
+    }, [location.pathname]);
 
     const handlelogout = async () => {
         try {
@@ -43,6 +50,7 @@ const Navbar = () => {
                     {userData?.role !== 'recruiter' && userData?.role !== 'admin' && (
                         <>
                             <Link to="/jobs" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>Jobs</Link>
+                            <Link to="/ai-job-matching" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>AI Matches</Link>
                             <Link to="/ai-resume" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>AI Resume</Link>
                             <Link to="/interview" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>AI Interviewer</Link>
                             <Link to="/code-reviewer" className='px-4 py-2 rounded-full text-md font-medium text-gray-600 hover:text-brand-600 hover:bg-brand-50 transition'>Code Review</Link>
@@ -82,7 +90,10 @@ const Navbar = () => {
                                         >
                                             Dashboard
                                         </button>
-                                        <button className='block w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-brand-50 hover:text-brand-600 transition'>
+                                        <button 
+                                            className='block w-full text-left px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-brand-50 hover:text-brand-600 transition'
+                                            onClick={() => navigate("/settings")}
+                                        >
                                             Settings
                                         </button>
                                         <button className='block w-full text-left px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 transition mt-1' onClick={handlelogout}>

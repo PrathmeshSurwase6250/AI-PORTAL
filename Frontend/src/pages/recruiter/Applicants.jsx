@@ -451,12 +451,150 @@ const Applicants = () => {
                                                         <IoDocumentTextOutline className="text-indigo-500" /> Resume
                                                     </h4>
                                                     {resume ? (
-                                                        <div className="space-y-1.5 text-sm text-gray-600">
-                                                            <p><span className="font-semibold">Name:</span> {resume.personal_Information?.full_Name || '—'}</p>
-                                                            <p><span className="font-semibold">Phone:</span> {resume.personal_Information?.phone_number || '—'}</p>
-                                                            <p><span className="font-semibold">City:</span> {resume.personal_Information?.city || '—'}</p>
+                                                        <div className="space-y-5 text-sm text-gray-700">
+                                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                                <div className="space-y-1.5">
+                                                                    <p className="font-semibold text-gray-900">Name</p>
+                                                                    <p>{resume.personal_Information?.full_Name || '—'}</p>
+                                                                </div>
+                                                                <div className="space-y-1.5">
+                                                                    <p className="font-semibold text-gray-900">Phone</p>
+                                                                    <p>{resume.personal_Information?.phone_number || '—'}</p>
+                                                                </div>
+                                                                <div className="space-y-1.5">
+                                                                    <p className="font-semibold text-gray-900">Email</p>
+                                                                    <p>{resume.personal_Information?.email || '—'}</p>
+                                                                </div>
+                                                                <div className="space-y-1.5">
+                                                                    <p className="font-semibold text-gray-900">City</p>
+                                                                    <p>{resume.personal_Information?.city || '—'}</p>
+                                                                </div>
+                                                            </div>
+
                                                             {resume.career_Objective && (
-                                                                <p className="text-xs text-gray-500 mt-2 italic line-clamp-3">"{resume.career_Objective}"</p>
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900">Career Objective</p>
+                                                                    <p className="text-sm text-gray-500 mt-1">{resume.career_Objective}</p>
+                                                                </div>
+                                                            )}
+
+                                                            {((resume.technical_skills?.programming_language?.length || 0) + (resume.technical_skills?.frontend?.length || 0) + (resume.technical_skills?.backend?.length || 0) + (resume.technical_skills?.database?.length || 0) + (resume.technical_skills?.tools?.length || 0)) > 0 && (
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900 mb-2">Technical Skills</p>
+                                                                    <div className="flex flex-wrap gap-2">
+                                                                        {resume.technical_skills?.programming_language?.map(skill => (
+                                                                            <span key={`pl-${skill}`} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">{skill}</span>
+                                                                        ))}
+                                                                        {resume.technical_skills?.frontend?.map(skill => (
+                                                                            <span key={`fe-${skill}`} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">{skill}</span>
+                                                                        ))}
+                                                                        {resume.technical_skills?.backend?.map(skill => (
+                                                                            <span key={`be-${skill}`} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">{skill}</span>
+                                                                        ))}
+                                                                        {resume.technical_skills?.database?.map(skill => (
+                                                                            <span key={`db-${skill}`} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">{skill}</span>
+                                                                        ))}
+                                                                        {resume.technical_skills?.tools?.map(skill => (
+                                                                            <span key={`tool-${skill}`} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">{skill}</span>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {resume.experience?.length > 0 && (
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900 mb-2">Work Experience</p>
+                                                                    <div className="space-y-3">
+                                                                        {resume.experience.map((exp, index) => (
+                                                                            <div key={index} className="rounded-2xl border border-gray-100 bg-white p-4">
+                                                                                <p className="font-bold text-gray-900">{exp.role || 'Role'}</p>
+                                                                                <p className="text-sm text-gray-500">{exp.company_Name || 'Company'} · {exp.duration || 'Duration'}</p>
+                                                                                {exp.work_description && <p className="text-sm text-gray-600 mt-2">{exp.work_description}</p>}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {resume.project?.length > 0 && (
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900 mb-2">Projects</p>
+                                                                    <div className="space-y-3">
+                                                                        {resume.project.map((project, index) => (
+                                                                            <div key={index} className="rounded-2xl border border-gray-100 bg-white p-4">
+                                                                                <p className="font-bold text-gray-900">{project.project_Title || 'Project Title'}</p>
+                                                                                {project.technologies?.length > 0 && (
+                                                                                    <p className="text-xs text-gray-500 mb-1">Technologies: {project.technologies.join(', ')}</p>
+                                                                                )}
+                                                                                {project.project_Description && <p className="text-sm text-gray-600">{project.project_Description}</p>}
+                                                                                {project.project_Live_Url && (
+                                                                                    <a href={project.project_Live_Url} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline text-sm block mt-2">Live URL</a>
+                                                                                )}
+                                                                                {project.project_Github_Link && (
+                                                                                    <a href={project.project_Github_Link} target="_blank" rel="noreferrer" className="text-indigo-600 hover:underline text-sm block">GitHub</a>
+                                                                                )}
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {resume.education?.length > 0 && (
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900 mb-2">Education</p>
+                                                                    <div className="space-y-3">
+                                                                        {resume.education.map((edu, index) => (
+                                                                            <div key={index} className="rounded-2xl border border-gray-100 bg-white p-4">
+                                                                                <p className="font-bold text-gray-900">{edu.degree || 'Degree'}</p>
+                                                                                <p className="text-sm text-gray-500">{edu.college || 'Institution'} · {edu.year || 'Year'}</p>
+                                                                            </div>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {resume.certifications?.length > 0 && (
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900 mb-2">Certifications</p>
+                                                                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                                                                        {resume.certifications.map((cert, index) => (
+                                                                            <li key={index}>{cert.title || 'Certification'}{cert.organization ? ` — ${cert.organization}` : ''}{cert.year ? ` (${cert.year})` : ''}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+
+                                                            {resume.achievements?.length > 0 && (
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900 mb-2">Achievements</p>
+                                                                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                                                                        {resume.achievements.map((item, index) => (
+                                                                            <li key={index}>{item}</li>
+                                                                        ))}
+                                                                    </ul>
+                                                                </div>
+                                                            )}
+
+                                                            {resume.softSkills?.length > 0 && (
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900 mb-2">Soft Skills</p>
+                                                                    <div className="flex flex-wrap gap-2">
+                                                                        {resume.softSkills.map(skill => (
+                                                                            <span key={skill} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">{skill}</span>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
+                                                            )}
+
+                                                            {resume.languages?.length > 0 && (
+                                                                <div>
+                                                                    <p className="font-semibold text-gray-900 mb-2">Languages</p>
+                                                                    <div className="flex flex-wrap gap-2">
+                                                                        {resume.languages.map(lang => (
+                                                                            <span key={lang} className="px-2.5 py-1 rounded-full bg-gray-100 text-gray-700 text-xs">{lang}</span>
+                                                                        ))}
+                                                                    </div>
+                                                                </div>
                                                             )}
                                                         </div>
                                                     ) : <p className="text-gray-400 text-sm">No resume data.</p>}

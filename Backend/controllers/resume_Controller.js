@@ -23,6 +23,13 @@ const createResume = async (req, res) => {
         });
 
     } catch (err) {
+        if (err.name === 'ValidationError') {
+            const messages = Object.values(err.errors).map(val => val.message);
+            return res.status(400).json({
+                message: "Validation Error",
+                details: messages
+            });
+        }
         res.status(500).json({
             message: "Server Side Error!",
             err: err.message

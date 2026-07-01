@@ -120,7 +120,7 @@ const TemplateATS = ({ data }) => {
 
             {/* SOFT SKILLS & ACHIEVEMENTS */}
             {((softSkills && softSkills.length > 0) || (achievements && achievements.length > 0)) && (
-                <div className="grid grid-cols-2 gap-4">
+                <div className="flex flex-col gap-4">
                     {softSkills && softSkills.length > 0 && (
                         <div>
                             <h2 className="text-sm font-bold uppercase border-b border-black mb-2">Soft Skills</h2>

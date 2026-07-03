@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist -r ai-portal"
+    "deploy": "gh-pages -d dist -r https://github.com/PrathmeshSurwase6250/AI-PORTAL.git"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.2.0",

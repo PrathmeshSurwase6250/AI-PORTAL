@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import EditJobModal from './EditJobModal';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import axios from 'axios';
-import { ServerURL } from '../../App';
+import { ServerURL } from '../../config/server';
 
 const getHeaders = () => ({
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },

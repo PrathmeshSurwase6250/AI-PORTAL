@@ -3,7 +3,7 @@ import { motion } from 'motion/react';
 import { IoSettingsOutline, IoLockClosedOutline, IoShieldCheckmarkOutline, IoPersonCircleOutline } from 'react-icons/io5';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { ServerURL } from '../App';
+import { ServerURL } from '../config/server';
 
 const Settings = () => {
     const userData = useSelector(state => state.auth?.userData);

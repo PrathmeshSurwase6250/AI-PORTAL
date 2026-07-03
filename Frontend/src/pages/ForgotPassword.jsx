@@ -4,7 +4,7 @@ import { BsRobot } from "react-icons/bs";
 import { IoMailOutline, IoArrowBackOutline, IoTimeOutline, IoCheckmarkCircleOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ServerURL } from '../App';
+import { ServerURL } from '../config/server';
 
 const ForgotPassword = () => {
     const [email, setEmail] = useState("");

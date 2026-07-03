@@ -5,7 +5,7 @@ import { checkApplication, withdrawApplication } from '../services/applicationAp
 import { motion, AnimatePresence } from 'motion/react';
 import { IoArrowBackOutline, IoBriefcaseOutline, IoLocationOutline, IoCashOutline, IoBusinessOutline, IoCheckmarkCircleOutline } from 'react-icons/io5';
 import ApplyJobModal from '../components/applications/ApplyJobModal';
-import { ServerURL } from '../App';
+import { ServerURL } from '../config/server';
 
 const JobDetails = () => {
     const { id } = useParams();

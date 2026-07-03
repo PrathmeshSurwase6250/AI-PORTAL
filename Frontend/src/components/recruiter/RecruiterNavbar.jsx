@@ -4,7 +4,7 @@ import { IoNotificationsOutline, IoSearchOutline, IoMenuOutline } from 'react-ic
 import { FaUserTie } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
-import { ServerURL } from '../../App'; // Fixed import path
+import { ServerURL } from '../../config/server'; // Fixed import path
 import { useDispatch, useSelector } from 'react-redux';
 import { setUserData } from '../../redux/userSlice';
 import { useEffect } from 'react';

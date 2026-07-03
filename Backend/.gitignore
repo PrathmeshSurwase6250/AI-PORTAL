@@ -1,2 +1,9 @@
-node_modules
 .env
+.env.*
+!.env.example
+node_modules/
+public/logos/
+*.log
+npm-debug.log*
+.DS_Store
+dist/

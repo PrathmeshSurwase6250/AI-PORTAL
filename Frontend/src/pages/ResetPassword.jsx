@@ -4,7 +4,7 @@ import { BsRobot } from "react-icons/bs";
 import { IoLockClosedOutline, IoCheckmarkCircleOutline, IoArrowBackOutline } from "react-icons/io5";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ServerURL } from '../App';
+import { ServerURL } from '../config/server';
 
 const ResetPassword = () => {
     const location = useLocation();

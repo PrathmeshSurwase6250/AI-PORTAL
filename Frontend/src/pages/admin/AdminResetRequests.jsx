@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IoTimeOutline, IoCheckmarkCircleOutline, IoCloseCircleOutline, IoPersonOutline, IoSearchOutline } from "react-icons/io5";
 import axios from 'axios';
-import { ServerURL } from '../../App';
+import { ServerURL } from '../../config/server';
 
 const AdminResetRequests = () => {
     const [requests, setRequests] = useState([]);

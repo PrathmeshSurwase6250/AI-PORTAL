@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { ServerURL } from '../../App';
+import { ServerURL } from '../../config/server';
 import StatCard from '../../components/admin/StatCard';
 import { IoPeopleOutline, IoBriefcaseOutline, IoDocumentTextOutline, IoChatbubbleEllipsesOutline } from 'react-icons/io5';
 

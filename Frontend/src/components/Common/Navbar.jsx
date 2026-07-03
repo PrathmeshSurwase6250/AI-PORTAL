@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { FaUserAstronaut, FaTimes } from "react-icons/fa";
 import { BsRobot } from "react-icons/bs";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ServerURL } from '../../App';
+import { ServerURL } from '../../config/server';
 import axios from 'axios';
 import { setUserData } from '../../redux/userSlice';
 import { useEffect } from 'react';

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
 import axios from 'axios';
 import JobCard from './JobCard';
-import { ServerURL } from '../../App';
+import { ServerURL } from '../../config/server';
 import { IoBriefcase, IoSearchOutline } from 'react-icons/io5';
 
 const JobList = ({ onSelectJob }) => {

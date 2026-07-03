@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'motion/react';
 import axios from 'axios';
-import { ServerURL } from '../../App';
+import { ServerURL } from '../../config/server';
 import { IoSparklesOutline, IoLocationOutline, IoBriefcaseOutline, IoChevronForwardOutline } from 'react-icons/io5';
 import { Link } from 'react-router-dom';
 

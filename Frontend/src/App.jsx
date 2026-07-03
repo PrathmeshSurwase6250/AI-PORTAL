@@ -3,6 +3,7 @@ import { Routes, Route, Outlet } from 'react-router-dom'
 import { useDispatch } from "react-redux";
 import { setUserData } from "./redux/userSlice";
 import axios from "axios";
+import { ServerURL } from "./config/server";
 
 // Base Pages
 import Home from './pages/Home/Home'
@@ -49,8 +50,8 @@ import ManageJobs from './pages/recruiter/ManageJobs'
 import RecruiterApplicants from './pages/recruiter/Applicants'
 import CompanyProfile from './pages/recruiter/CompanyProfile'
 
-// Configuration
-export const ServerURL = 'http://localhost:3000'
+
+// ServerURL imported from ./config/server (reads VITE_API_URL env var)
 
 // A small layout strictly for the public/jobseeker pages
 const MainLayout = () => (

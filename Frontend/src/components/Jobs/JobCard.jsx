@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { IoLocationOutline, IoBriefcaseOutline, IoCashOutline, IoTimeOutline } from 'react-icons/io5';
-import { ServerURL } from '../../App';
+import { ServerURL } from '../../config/server';
 
 const JobCard = ({ job, onClick }) => {
   const logoUrl = job?.company_logo?.url;

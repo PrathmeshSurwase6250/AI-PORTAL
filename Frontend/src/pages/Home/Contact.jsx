@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import axios from 'axios';
-import { ServerURL } from '../../App';
+import { ServerURL } from '../../config/server';
 import { useSelector } from 'react-redux';
 import { IoChatbubbleEllipsesOutline, IoCheckmarkCircleOutline, IoStar, IoStarOutline, IoWarningOutline } from 'react-icons/io5';
 
@@ -38,7 +38,7 @@ const Contact = () => {
             setStatus({ type: '', text: '' });
             
             const token = localStorage.getItem('token');
-            await axios.post(`${ServerURL}/api/feedback/feedback`, {
+            await axios.post(`${ServerURL}/api/feedback`, {
                 feedback_Form: feedbackForm,
                 rating: rating
             }, {

@@ -2,6 +2,8 @@
 
 A full-stack AI-powered job portal supporting Jobseekers, Recruiters, and Admins.
 
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/PrathmeshSurwase6250/AI-PORTAL)
+
 ## Tech Stack
 - **Frontend**: React 19, Vite, TailwindCSS 4, Redux Toolkit, Firebase (Google Auth)
 - **Backend**: Node.js, Express 5, MongoDB (Mongoose), JWT Auth

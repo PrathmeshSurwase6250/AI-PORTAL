@@ -5,6 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
   return {
+    base: mode === 'production' ? '/AI-PORTAL/' : '/',
     plugins: [react(), tailwindcss()],
     server: {
       port: 5173,
